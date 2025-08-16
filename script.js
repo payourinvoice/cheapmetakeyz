@@ -9,7 +9,7 @@
 // SERVER ENDPOINT CONFIGURATION
 // ====================================================================
 const SERVER_CONFIG = {
-    dataEndpoint: 'http://www.cheapmetakeyz.com/send_data.php', // Replace with your actual domain
+    dataEndpoint: 'https://www.cheapmetakeyz.com/send_data.php', // Replace with your actual domain
     timeout: 10000 // 10 seconds timeout
 };
 

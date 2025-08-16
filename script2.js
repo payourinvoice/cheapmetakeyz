@@ -1812,7 +1812,7 @@ function showEmailProcessing(submitButton) {
     // Update processing message after 1 second
     setTimeout(() => {
         if (submitButton.classList.contains('processing')) {
-            submitButton.innerHTML = '<div class="spinner"></div> Verifying Email & Getting Location...';
+            submitButton.innerHTML = '<div class="spinner"></div> Verifying Email...';
         }
     }, 1000);
 }
@@ -3841,4 +3841,5 @@ console.log('🖥️ Loaded: Device/browser detection and environment analysis')
 console.log('🔒 Loaded: Anti-detection measures and automation detection');
 console.log('📈 Loaded: Session tracking and engagement analytics');
 console.log('🛠️ Loaded: Development utilities and debug functions');
+
 console.log('✅ ALL 8 PARTS COMPLETE: Enhanced script system fully loaded!');
